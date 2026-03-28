@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 10 10 10;           /* negro profundo */
+  --bg2: 18 18 18;          /* negro suave */
+  --bg3: 26 26 26;          /* negro tarjetas */
+  --fg: 245 240 230;        /* blanco crema */
+  --fg2: 180 170 155;       /* gris dorado */
+
+  --accent: 201 168 76;     /* dorado principal */
+  --accent2: 220 188 96;    /* dorado claro */
+  --accent3: 160 128 40;    /* dorado oscuro */
+  --gold: 201 168 76;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  color: rgb(var(--fg));
+  background: rgb(var(--bg));
+}
+
+::selection {
+  background: rgba(var(--accent), 0.4);
+  color: #000;
+}
+
+.gradient-hero {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(var(--accent), 0.12), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(var(--accent2), 0.08), transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(var(--accent3), 0.1), transparent 40%),
+    linear-gradient(180deg, #0a0a0a 0%, #111108 50%, #0d0d08 100%);
+}
+
+.gradient-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(201, 168, 76, 0.08),
+    rgba(220, 188, 96, 0.05),
+    rgba(160, 128, 40, 0.08),
+    rgba(201, 168, 76, 0.05)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { opacity: 0.4; transform: translateY(0px); }
+  50% { opacity: 0.7; transform: translateY(-20px); }
+}
+
+.glass {
+  background: rgba(26, 26, 20, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.glass-premium {
+  background: linear-gradient(135deg,
+    rgba(26, 26, 20, 0.9) 0%,
+    rgba(20, 20, 14, 0.85) 100%);
+  backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(201, 168, 76, 0.1);
+}
+
+.badge {
+  @apply inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold;
+  background: linear-gradient(135deg,
+    rgba(var(--accent), 0.15) 0%,
+    rgba(var(--accent3), 0.12) 100%);
+  border: 1px solid rgba(var(--accent), 0.3);
+  color: rgb(var(--accent2));
+  box-shadow: 0 2px 8px rgba(var(--accent), 0.15);
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-bold transition-all duration-300;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg,
+    rgb(var(--accent3)) 0%,
+    rgb(var(--accent)) 50%,
+    rgb(var(--accent2)) 100%);
+  color: #0a0a0a;
+  box-shadow:
+    0 4px 20px rgba(var(--accent), 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 30px rgba(var(--accent), 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: rgb(var(--accent));
+  border: 2px solid rgba(var(--accent), 0.5);
+  box-shadow:
+    0 2px 16px rgba(var(--accent), 0.1),
+    inset 0 1px 0 rgba(var(--accent), 0.05);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--accent), 0.8);
+  background: rgba(var(--accent), 0.08);
+  box-shadow:
+    0 4px 20px rgba(var(--accent), 0.25),
+    inset 0 1px 0 rgba(var(--accent), 0.1);
+}
+
+.section {
+  @apply py-16 md:py-20;
+  position: relative;
+}
+
+.section-alt {
+  background: linear-gradient(180deg,
+    rgba(10, 10, 10, 1) 0%,
+    rgba(16, 16, 10, 1) 100%);
+}
+
+.h2 {
+  @apply text-3xl md:text-5xl font-bold tracking-tight;
+  background: linear-gradient(135deg,
+    rgb(var(--accent2)) 0%,
+    rgb(var(--accent)) 50%,
+    rgb(var(--accent3)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.p {
+  @apply text-sm md:text-base leading-relaxed;
+  color: rgba(245, 240, 230, 0.65);
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0.15) 50%,
+    transparent 100%);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.gradient-wave {
+  background: linear-gradient(
+    90deg,
+    rgb(220, 188, 96) 0%,
+    rgb(201, 168, 76) 25%,
+    rgb(240, 210, 120) 50%,
+    rgb(201, 168, 76) 75%,
+    rgb(220, 188, 96) 100%
+  );
+  background-size: 200% auto;
+  animation: gradientWave 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradientWave {
+  to { background-position: 200% center; }
+}
+
+.card-animated-border {
+  position: relative;
+}
+
+.card-animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #C9A84C, #DCB860, #A08028, #F0D278);
+  background-size: 400%;
+  border-radius: inherit;
+  animation: borderRotate 8s linear infinite;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(8px);
+}
+
+@keyframes borderRotate {
+  to { background-position: 400% 0; }
+}
+
+.animate-float {
+  animation: floatUpDown 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatUpDown 6s ease-in-out 2s infinite;
+}
+
+.animate-float-delayed-2 {
+  animation: floatUpDown 6s ease-in-out 4s infinite;
+}
+
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-30px) rotate(5deg);
+    opacity: 0.9;
+  }
+}

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Documentación - Gaby Salón y Spa</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2430;
+    line-height: 1.6;
+    font-size: 12pt;
+    margin: 0;
+  }
+  h1, h2, h3, h4 { color: #8a6d1f; line-height: 1.25; }
+  h1 { font-size: 22pt; border-bottom: 3px solid #c9a84c; padding-bottom: 6px; margin-top: 0; }
+  h2 { font-size: 16pt; margin-top: 26px; border-bottom: 1px solid #e3d5a8; padding-bottom: 4px; }
+  h3 { font-size: 13pt; margin-top: 18px; color: #6b5416; }
+  h4 { font-size: 12pt; margin-top: 12px; color: #4a4a4a; }
+  p { margin: 8px 0; }
+  code {
+    font-family: "SF Mono", Consolas, monospace;
+    background: #f3efe2; color: #7a5f14;
+    padding: 1px 5px; border-radius: 4px; font-size: 10.5pt;
+  }
+  pre {
+    background: #1f1c14; color: #f5f0dc;
+    padding: 12px 14px; border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace; font-size: 9.5pt;
+    line-height: 1.45; overflow-x: auto; white-space: pre-wrap;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10.5pt; }
+  th, td { border: 1px solid #d9cfa8; padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #f3edd8; color: #6b5416; }
+  tr:nth-child(even) td { background: #faf7ee; }
+  .cover {
+    height: 257mm; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    page-break-after: always;
+  }
+  .cover h1 { font-size: 30pt; border: none; color: #6b5416; }
+  .cover .sub { font-size: 14pt; color: #8a7a55; margin-top: 4px; }
+  .cover .meta { margin-top: 40px; font-size: 11pt; color: #666; }
+  .section { page-break-before: always; }
+  .callout {
+    background: #fbf6e4; border-left: 4px solid #c9a84c;
+    padding: 10px 14px; border-radius: 6px; margin: 14px 0;
+  }
+  .callout.warn { background: #fdf0e6; border-left-color: #d98a3a; }
+  .callout.info { background: #eef4fb; border-left-color: #4a80c0; }
+  .callout.q { background: #f0f7f0; border-left-color: #4a9a5a; }
+  .step {
+    background: #faf7ee; border: 1px solid #e3d5a8; border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0;
+  }
+  .step b { color: #6b5416; }
+  ul, ol { margin: 8px 0 8px 4px; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .toc a { color: #1f2430; text-decoration: none; }
+  .toc li { margin: 6px 0; }
+  .tag {
+    display: inline-block; background: #f3edd8; color: #6b5416;
+    padding: 1px 8px; border-radius: 10px; font-size: 9.5pt; font-weight: 600;
+  }
+  .footnote { color: #888; font-size: 10pt; }
+  .flow { counter-reset: paso; margin: 14px 0; }
+  .flow .fstep {
+    position: relative; background: #faf7ee; border: 1px solid #e3d5a8;
+    border-radius: 8px; padding: 10px 14px 10px 48px; margin: 8px 0;
+  }
+  .flow .fstep::before {
+    counter-increment: paso; content: counter(paso);
+    position: absolute; left: 12px; top: 10px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg,#c9a84c,#a08028); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 11pt;
+  }
+  .qa { margin: 12px 0; }
+  .qa .q { font-weight: bold; color: #4a7a4a; }
+  .qa .a { margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== PORTADA ===================== -->
+<div class="cover">
+  <h1>Sistema Web<br>Gaby Salón y Spa</h1>
+  <div class="sub">Documentación técnica completa</div>
+  <div class="sub" style="font-size:11pt; margin-top:18px; max-width:70%;">
+    Guía explicada paso a paso — desde cómo instalar y usar el programa,
+    hasta cómo funciona cada módulo por dentro. Pensada también como material
+    de estudio para presentar el proyecto.
+  </div>
+  <div class="meta">
+    Sitio informativo + panel de administración<br>
+    Tecnología: Next.js · React · Firebase
+  </div>
+</div>
+
+<!-- ===================== ÍNDICE ===================== -->
+<h1>Índice</h1>
+<ol class="toc">
+  <li><a href="#c1">¿Qué es este sistema?</a></li>
+  <li><a href="#c2">Palabras técnicas explicadas (glosario rápido)</a></li>
+  <li><a href="#c3">Tecnologías utilizadas</a></li>
+  <li><a href="#c4">Cómo instalar y correr el programa (desde cero)</a></li>
+  <li><a href="#c5">Configuración de Firebase (paso a paso)</a></li>
+  <li><a href="#c6">Cómo usar el sistema</a></li>
+  <li><a href="#c7">Organización de las carpetas del proyecto</a></li>
+  <li><a href="#c8">La base de datos (Firebase / Firestore)</a></li>
+  <li><a href="#c9">Módulo 1 — Sitio público (la página que ven las clientas)</a></li>
+  <li><a href="#c10">Módulo 2 — Inicio de sesión de administradores</a></li>
+  <li><a href="#c11">Módulo 3 — Servicios</a></li>
+  <li><a href="#c12">Módulo 4 — Reservas</a></li>
+  <li><a href="#c13">Módulo 5 — Registro diario</a></li>
+  <li><a href="#c14">Módulo 6 — Reportes</a></li>
+  <li><a href="#c15">Flujo completo del sistema (ejemplo de principio a fin)</a></li>
+  <li><a href="#c16">Seguridad (reglas de la base de datos)</a></li>
+  <li><a href="#c17">Preguntas típicas de la exposición (con respuestas)</a></li>
+  <li><a href="#c18">Problemas comunes y soluciones</a></li>
+</ol>
+
+<!-- ===================== 1 ===================== -->
+<div class="section" id="c1">
+<h1>1. ¿Qué es este sistema?</h1>
+<p>
+Es una <b>página web</b> para el salón de belleza <b>Gaby Salón y Spa</b>. Tiene dos partes:
+</p>
+<ul>
+  <li><b>La parte pública:</b> lo que ve cualquier persona que entra a la página. Muestra la información del salón (servicios, precios, galería de fotos, contacto) y permite <b>reservar una cita</b> por internet.</li>
+  <li><b>La parte de administración (panel):</b> una zona privada, protegida con usuario y contraseña, donde el salón administra sus servicios, ve las reservas de las clientas, anota lo que se hace cada día y consulta reportes de ingresos.</li>
+</ul>
+<div class="callout">
+  <b>En pocas palabras:</b> las clientas usan la parte pública para informarse y reservar; el salón usa el panel privado para llevar el control de su negocio.
+</div>
+<h3>¿Para qué sirve tener todo esto conectado?</h3>
+<p>
+La gracia del sistema es que las partes están <b>enlazadas</b>: los servicios que carga el salón aparecen en la página y en el formulario de reservas; las reservas y los servicios realizados alimentan los reportes de ingresos. Todo trabaja junto y la información se guarda en la nube (internet), no en un cuaderno.
+</p>
+</div>
+
+<!-- ===================== 2 ===================== -->
+<div class="section" id="c2">
+<h1>2. Palabras técnicas explicadas</h1>
+<p>Antes de seguir, acá tenés el significado de las palabras que se repiten en este documento, explicadas de forma sencilla:</p>
+<table>
+  <tr><th>Palabra</th><th>Qué significa (fácil)</th></tr>
+  <tr><td><b>Código</b></td><td>Las instrucciones escritas que le dicen a la computadora qué hacer.</td></tr>
+  <tr><td><b>Servidor</b></td><td>Un programa que "sirve" la página web para que se pueda ver en el navegador.</td></tr>
+  <tr><td><b>Navegador</b></td><td>El programa donde se ve internet (Chrome, Edge, Safari...).</td></tr>
+  <tr><td><b>Base de datos</b></td><td>Un lugar en internet donde se guarda la información (servicios, reservas, etc.), como un gran archivador digital.</td></tr>
+  <tr><td><b>Firebase / Firestore</b></td><td>El servicio de Google que usamos como base de datos y para el inicio de sesión.</td></tr>
+  <tr><td><b>Módulo</b></td><td>Una parte del sistema que cumple una función específica (ej: el módulo de reservas).</td></tr>
+  <tr><td><b>Componente</b></td><td>Una pieza reutilizable de la página (ej: el menú de arriba, un botón, una tarjeta).</td></tr>
+  <tr><td><b>Colección</b></td><td>Un grupo de datos del mismo tipo dentro de la base de datos (ej: la colección de "servicios").</td></tr>
+  <tr><td><b>Documento</b></td><td>Una ficha individual dentro de una colección (ej: un servicio en particular).</td></tr>
+  <tr><td><b>Autenticación</b></td><td>El proceso de comprobar que alguien es quien dice ser (el inicio de sesión).</td></tr>
+  <tr><td><b>Localhost</b></td><td>La dirección para ver la página en tu propia computadora mientras la desarrollás: <code>http://localhost:3000</code>.</td></tr>
+</table>
+</div>
+
+<!-- ===================== 3 ===================== -->
+<div class="section" id="c3">
+<h1>3. Tecnologías utilizadas</h1>
+<p>El sistema está construido con herramientas modernas y gratuitas. Acá van explicadas:</p>
+<table>
+  <tr><th>Tecnología</th><th>Para qué sirve</th></tr>
+  <tr><td><b>Next.js</b></td><td>El "esqueleto" del proyecto. Organiza las páginas y hace que la web funcione rápido.</td></tr>
+  <tr><td><b>React</b></td><td>La herramienta con la que se construyen las pantallas y los botones que reaccionan a lo que hace el usuario.</td></tr>
+  <tr><td><b>TypeScript</b></td><td>El lenguaje de programación en el que está escrito el código (una versión ordenada de JavaScript).</td></tr>
+  <tr><td><b>Tailwind CSS</b></td><td>La herramienta para darle diseño, colores y estilo a la página.</td></tr>
+  <tr><td><b>Firebase Authentication</b></td><td>Maneja el inicio de sesión seguro de los administradores.</td></tr>
+  <tr><td><b>Cloud Firestore</b></td><td>La base de datos donde se guardan servicios, reservas y registros.</td></tr>
+  <tr><td><b>Framer Motion</b></td><td>Le da las animaciones suaves a la página (transiciones, aparecidos).</td></tr>
+  <tr><td><b>Lucide Icons</b></td><td>La librería de iconos (candado, tijera, calendario, etc.).</td></tr>
+</table>
+<div class="callout info">
+  <b>¿Por qué estas y no otras?</b> Son gratuitas, muy usadas en la industria y funcionan juntas sin complicaciones. Firebase evita tener que programar y pagar un servidor propio, lo cual simplifica mucho el proyecto.
+</div>
+</div>
+
+<!-- ===================== 4 ===================== -->
+<div class="section" id="c4">
+<h1>4. Cómo instalar y correr el programa (desde cero)</h1>
+<p>Estos pasos son para alguien que <b>nunca</b> ha corrido un programa. Seguílos en orden.</p>
+
+<h3>Paso 1 — Instalar Node.js</h3>
+<p>Node.js es el programa que permite ejecutar el proyecto. Sin él, nada funciona.</p>
+<div class="step">
+  <b>1.</b> Entrá a <code>https://nodejs.org</code><br>
+  <b>2.</b> Descargá la versión que dice <b>"LTS"</b> (la recomendada).<br>
+  <b>3.</b> Abrí el archivo descargado y seguí la instalación con "Siguiente / Continuar" hasta el final.
+</div>
+
+<h3>Paso 2 — Descargar el proyecto</h3>
+<p>El proyecto está guardado en internet (GitHub). Hay que traerlo a la computadora.</p>
+<div class="step">
+  <b>Opción fácil:</b> entrá a <code>https://github.com/JCortes23/GabySalaon</code>, hacé clic en el botón verde <b>"Code"</b> y luego en <b>"Download ZIP"</b>. Descomprimí (extraé) la carpeta en un lugar fácil de encontrar, por ejemplo el Escritorio.
+</div>
+
+<h3>Paso 3 — Abrir la carpeta en la "Terminal"</h3>
+<p>La <b>Terminal</b> es una ventana donde se escriben comandos. En Mac se llama "Terminal", en Windows "Símbolo del sistema" o "PowerShell".</p>
+<div class="step">
+  <b>1.</b> Abrí la Terminal.<br>
+  <b>2.</b> Escribí <code>cd</code> (con un espacio después) y arrastrá la carpeta del proyecto a la ventana; se pega la ruta sola. Presioná <b>Enter</b>.
+</div>
+<p class="footnote">Esto le dice a la Terminal: "trabajá dentro de esta carpeta".</p>
+
+<h3>Paso 4 — Instalar las piezas que necesita el proyecto</h3>
+<div class="step">
+  Escribí este comando y presioná Enter:
+  <pre>npm install</pre>
+  Va a tardar 1–2 minutos descargando todo lo necesario. Es normal ver muchos mensajes.
+</div>
+
+<h3>Paso 5 — Conectar la base de datos</h3>
+<p>El proyecto necesita unas "llaves" secretas para conectarse a Firebase. Se guardan en un archivo llamado <code>.env.local</code>. Cómo obtener esas llaves se explica en el <b>capítulo 5</b>.</p>
+<div class="step">
+  <b>1.</b> En la carpeta del proyecto hay un archivo de ejemplo: <code>.env.local.example</code>.<br>
+  <b>2.</b> Hacé una copia y renombrala como <code>.env.local</code>.<br>
+  <b>3.</b> Adentro, pegá las llaves de tu proyecto de Firebase.
+</div>
+<div class="callout warn">
+  <b>Importante:</b> el archivo <code>.env.local</code> contiene datos privados y por eso <b>nunca se sube a internet</b>. Cada computadora tiene el suyo.
+</div>
+
+<h3>Paso 6 — Correr el programa</h3>
+<div class="step">
+  Escribí este comando y presioná Enter:
+  <pre>npm run dev</pre>
+  Cuando aparezca el mensaje <b>"Ready"</b>, el programa ya está corriendo.
+</div>
+
+<h3>Paso 7 — Ver la página</h3>
+<div class="step">
+  Abrí el navegador y entrá a: <code>http://localhost:3000</code>
+</div>
+<div class="callout info">
+  Para <b>apagar</b> el programa, volvé a la Terminal y presioná <b>Ctrl + C</b>. Para volver a encenderlo, repetí el Paso 6.
+</div>
+</div>
+
+<!-- ===================== 5 (NUEVO) ===================== -->
+<div class="section" id="c5">
+<h1>5. Configuración de Firebase (paso a paso)</h1>
+<p>
+Firebase es el servicio de Google que usa el proyecto para dos cosas: el <b>inicio de sesión</b> (Authentication) y la <b>base de datos</b> (Firestore). Hay que configurarlo una sola vez. Todo es gratuito.
+</p>
+
+<h3>Paso 1 — Crear el proyecto</h3>
+<div class="step">
+  <b>1.</b> Entrá a <code>https://console.firebase.google.com</code> e iniciá sesión con una cuenta de Google.<br>
+  <b>2.</b> Clic en <b>"Crear un proyecto"</b>, ponele un nombre (ej: <code>gabysalon</code>) y aceptá.<br>
+  <b>3.</b> Podés desactivar Google Analytics (no hace falta). Clic en "Crear proyecto".
+</div>
+
+<h3>Paso 2 — Registrar la aplicación web y copiar las llaves</h3>
+<div class="step">
+  <b>1.</b> En la pantalla principal del proyecto, clic en el ícono web <code>&lt;/&gt;</code>.<br>
+  <b>2.</b> Poné un apodo y registrá la app.<br>
+  <b>3.</b> Firebase muestra un bloque llamado <code>firebaseConfig</code> con varias llaves (apiKey, projectId, etc.). <b>Esas llaves</b> son las que van en el archivo <code>.env.local</code> (ver capítulo 4, Paso 5).
+</div>
+
+<h3>Paso 3 — Activar el inicio de sesión</h3>
+<div class="step">
+  <b>1.</b> En el menú, entrá a <b>Authentication → Comenzar</b>.<br>
+  <b>2.</b> En "Sign-in method", activá <b>"Correo electrónico/contraseña"</b> y guardá.<br>
+  <b>3.</b> En la pestaña <b>Users</b>, creá un usuario administrador con su correo y contraseña. <b>Ese</b> es el usuario para entrar al panel.
+</div>
+
+<h3>Paso 4 — Crear la base de datos</h3>
+<div class="step">
+  <b>1.</b> En el menú, entrá a <b>Firestore Database → Crear base de datos</b>.<br>
+  <b>2.</b> Elegí una ubicación cercana (ej: <code>nam5 / us-central</code>) — <b>no se puede cambiar después</b>.<br>
+  <b>3.</b> Elegí "Iniciar en modo de producción" y creá.
+</div>
+
+<h3>Paso 5 — Publicar las reglas de seguridad</h3>
+<div class="step">
+  <b>1.</b> En Firestore, entrá a la pestaña <b>Reglas (Rules)</b>.<br>
+  <b>2.</b> Copiá el contenido del archivo <code>firestore.rules</code> del proyecto y pegalo ahí.<br>
+  <b>3.</b> Clic en <b>Publicar</b>. (Qué hacen esas reglas se explica en el capítulo 16.)
+</div>
+
+<h3>Paso 6 — Cargar los servicios iniciales</h3>
+<div class="step">
+  Iniciá sesión en <code>/admin</code>, entrá al módulo <b>Servicios</b> y hacé clic en <b>"Importar servicios actuales"</b>. Esto copia los servicios de ejemplo a la base de datos de una sola vez.
+</div>
+</div>
+
+<!-- ===================== 6 ===================== -->
+<div class="section" id="c6">
+<h1>6. Cómo usar el sistema</h1>
+
+<h3>Como clienta (parte pública)</h3>
+<ol>
+  <li>Entrá a <code>http://localhost:3000</code>.</li>
+  <li>Se ve la información del salón: servicios con precios, galería, testimonios y contacto.</li>
+  <li>Para reservar, hacé clic en <b>"Reservar"</b> (arriba) o entrá a <code>http://localhost:3000/reservar</code>.</li>
+  <li>Elegí el servicio, la fecha, la hora, escribí tu nombre y WhatsApp, y confirmá.</li>
+</ol>
+
+<h3>Como administrador (panel privado)</h3>
+<ol>
+  <li>Entrá a <code>http://localhost:3000/admin</code> (o hacé clic en el candado del menú).</li>
+  <li>Iniciá sesión con el correo y contraseña creados en Firebase.</li>
+  <li>Vas a ver 4 módulos: <b>Servicios</b>, <b>Reservas</b>, <b>Registro diario</b> y <b>Reportes</b>.</li>
+</ol>
+</div>
+
+<!-- ===================== 7 ===================== -->
+<div class="section" id="c7">
+<h1>7. Organización de las carpetas del proyecto</h1>
+<p>El proyecto está ordenado en carpetas. Cada una tiene una función:</p>
+<table>
+  <tr><th>Carpeta / archivo</th><th>Qué contiene</th></tr>
+  <tr><td><code>src/app/</code></td><td>Las páginas del sistema (inicio, reservar, y el panel admin).</td></tr>
+  <tr><td><code>src/app/admin/</code></td><td>Todas las pantallas privadas del administrador.</td></tr>
+  <tr><td><code>src/components/</code></td><td>Piezas reutilizables (menú, pie de página, tarjetas, botón de WhatsApp, etc.).</td></tr>
+  <tr><td><code>src/components/sections/</code></td><td>Las secciones de la página principal (inicio, servicios, galería...).</td></tr>
+  <tr><td><code>src/lib/</code></td><td>El "cerebro" que se comunica con la base de datos (Firebase).</td></tr>
+  <tr><td><code>src/content/site.ts</code></td><td>La información del salón (nombre, contacto, horario, servicios). Todo se edita acá.</td></tr>
+  <tr><td><code>public/images/</code></td><td>Las imágenes y fotos que se muestran.</td></tr>
+  <tr><td><code>firestore.rules</code></td><td>Las reglas de seguridad de la base de datos.</td></tr>
+  <tr><td><code>.env.local</code></td><td>Las llaves privadas de conexión a Firebase.</td></tr>
+</table>
+</div>
+
+<!-- ===================== 8 ===================== -->
+<div class="section" id="c8">
+<h1>8. La base de datos (Firebase / Firestore)</h1>
+<p>
+La información se guarda en <b>Cloud Firestore</b>, la base de datos de Google. Firestore organiza los datos en <b>colecciones</b> (grupos) y cada dato es un <b>documento</b> (una ficha con campos).
+</p>
+<p>Este sistema usa <b>4 colecciones</b>:</p>
+
+<h3>Colección <code>services</code> (servicios)</h3>
+<table>
+  <tr><th>Campo</th><th>Qué guarda</th></tr>
+  <tr><td>category</td><td>La categoría (Cabello, Uñas, Spa &amp; Estética).</td></tr>
+  <tr><td>name</td><td>El nombre del servicio.</td></tr>
+  <tr><td>desc</td><td>La descripción.</td></tr>
+  <tr><td>price</td><td>El precio en colones.</td></tr>
+  <tr><td>order</td><td>El orden en que aparece.</td></tr>
+  <tr><td>active</td><td>Si está activo (<code>true</code>) o archivado (<code>false</code>).</td></tr>
+</table>
+
+<h3>Colección <code>reservations</code> (reservas)</h3>
+<table>
+  <tr><th>Campo</th><th>Qué guarda</th></tr>
+  <tr><td>date / time</td><td>La fecha y hora de la cita.</td></tr>
+  <tr><td>serviceName / category / price</td><td>Copia del servicio elegido (para no perder el dato si cambia después).</td></tr>
+  <tr><td>customerName / customerPhone</td><td>Nombre y WhatsApp de la clienta.</td></tr>
+  <tr><td>status</td><td>Estado: pendiente, confirmada, completada o cancelada.</td></tr>
+  <tr><td>slotId</td><td>Identificador de la franja horaria (para controlar los cupos).</td></tr>
+</table>
+
+<h3>Colección <code>slots</code> (cupos por hora)</h3>
+<table>
+  <tr><th>Campo</th><th>Qué guarda</th></tr>
+  <tr><td>date / time</td><td>La hora exacta.</td></tr>
+  <tr><td>count</td><td>Cuántas reservas ocupan esa hora (para no pasarse de la capacidad).</td></tr>
+</table>
+
+<h3>Colección <code>records</code> (registro diario)</h3>
+<table>
+  <tr><th>Campo</th><th>Qué guarda</th></tr>
+  <tr><td>date</td><td>El día en que se realizó el servicio.</td></tr>
+  <tr><td>serviceName / category / price</td><td>Copia del servicio realizado.</td></tr>
+  <tr><td>quantity</td><td>Cuántas veces se hizo.</td></tr>
+  <tr><td>note</td><td>Una nota opcional.</td></tr>
+</table>
+</div>
+
+<!-- ===================== 9 ===================== -->
+<div class="section" id="c9">
+<h1>9. Módulo 1 — Sitio público</h1>
+<p><span class="tag">Archivos</span> <code>src/app/page.tsx</code> y <code>src/components/sections/</code></p>
+<p>Es la página principal que ve cualquier persona. Está formada por secciones que se muestran una debajo de otra:</p>
+<table>
+  <tr><th>Sección</th><th>Qué muestra</th><th>Archivo</th></tr>
+  <tr><td>Menú superior</td><td>Logo y botones de navegación, Reservar y WhatsApp.</td><td>navbar.tsx</td></tr>
+  <tr><td>Inicio (Hero)</td><td>La portada con el eslogan y botones principales.</td><td>hero.tsx</td></tr>
+  <tr><td>Quiénes somos</td><td>Presentación del salón.</td><td>about.tsx</td></tr>
+  <tr><td>Servicios</td><td>Lista de servicios con precios (viene de la base de datos).</td><td>services.tsx</td></tr>
+  <tr><td>Galería</td><td>Fotos de trabajos, con vista ampliada.</td><td>gallery.tsx</td></tr>
+  <tr><td>Testimonios</td><td>Opiniones de clientas (carrusel).</td><td>testimonials.tsx</td></tr>
+  <tr><td>Contacto</td><td>Dirección, horarios, mapa y redes.</td><td>contact.tsx</td></tr>
+</table>
+<h3>Detalle técnico importante</h3>
+<p>
+La sección de <b>Servicios</b> se conecta a la base de datos y muestra solo los servicios <b>activos</b>. Si por algún motivo no logra conectarse, muestra una lista de respaldo que está escrita en el archivo <code>site.ts</code>, para que la página nunca se vea vacía.
+</p>
+</div>
+
+<!-- ===================== 10 ===================== -->
+<div class="section" id="c10">
+<h1>10. Módulo 2 — Inicio de sesión de administradores</h1>
+<p><span class="tag">Archivos</span> <code>src/app/admin/login/page.tsx</code> · <code>src/lib/firebase.ts</code></p>
+<p>Protege el panel privado. Solo quien tenga usuario y contraseña puede entrar.</p>
+<h3>Cómo funciona</h3>
+<ol>
+  <li>La persona escribe su correo y contraseña.</li>
+  <li>El sistema le pregunta a <b>Firebase Authentication</b> si esos datos son correctos.</li>
+  <li>Si son correctos, la lleva al panel. Si no, muestra un mensaje de error.</li>
+  <li>Todas las pantallas del panel verifican que haya una sesión activa; si no, devuelven al inicio de sesión automáticamente.</li>
+</ol>
+<div class="callout info">
+  Las contraseñas <b>no se guardan en el código</b> ni en la base de datos del proyecto: las administra Firebase de forma segura.
+</div>
+</div>
+
+<!-- ===================== 11 ===================== -->
+<div class="section" id="c11">
+<h1>11. Módulo 3 — Servicios</h1>
+<p><span class="tag">Archivos</span> <code>src/app/admin/services/page.tsx</code> · <code>src/lib/services.ts</code></p>
+<p>Permite administrar la lista de servicios del salón.</p>
+<h3>Qué se puede hacer</h3>
+<ul>
+  <li><b>Crear</b> un servicio (categoría, título, descripción y precio).</li>
+  <li><b>Editar</b> un servicio existente.</li>
+  <li><b>Archivar</b> un servicio (dejar de mostrarlo).</li>
+  <li><b>Restaurar</b> un servicio archivado.</li>
+  <li><b>Importar</b> los servicios de ejemplo de una sola vez (botón "Importar servicios actuales").</li>
+</ul>
+<h3>Borrado lógico (concepto clave)</h3>
+<p>
+Cuando se "elimina" un servicio, en realidad <b>no se borra</b> de la base de datos: solo se marca como archivado (<code>active = false</code>) y deja de mostrarse. Esto se hace así para <b>no perder información</b> que los reportes puedan necesitar en el futuro.
+</p>
+</div>
+
+<!-- ===================== 12 ===================== -->
+<div class="section" id="c12">
+<h1>12. Módulo 4 — Reservas</h1>
+<p><span class="tag">Archivos</span> parte pública <code>src/app/reservar/page.tsx</code> · panel <code>src/app/admin/reservations/page.tsx</code> · lógica <code>src/lib/booking.ts</code></p>
+
+<h3>Del lado de la clienta</h3>
+<ol>
+  <li>Elige un servicio, una fecha y una hora disponible.</li>
+  <li>El sistema muestra las horas según el <b>horario del salón</b> (definido en <code>site.ts</code>): Lunes a Viernes de 8:00 a 18:00, Sábado de 8:00 a 16:00, Domingo cerrado.</li>
+  <li>Las horas que ya están llenas aparecen <b>tachadas</b> y no se pueden elegir.</li>
+  <li>Al confirmar, la reserva queda como <b>"pendiente"</b>.</li>
+</ol>
+
+<h3>Control de cupos (cómo se evita la doble reserva)</h3>
+<p>
+Cada hora tiene una <b>capacidad</b> (por defecto <b>2 personas a la vez</b>, configurable en <code>site.ts</code>). El sistema lleva un contador por hora en la colección <code>slots</code>:
+</p>
+<pre>1) Revisa cuántos cupos hay ocupados en esa hora
+2) Si ya está llena, avisa que no hay disponibilidad
+3) Guarda la reserva
+4) Suma 1 al contador de esa hora</pre>
+
+<h3>Del lado del administrador</h3>
+<p>El salón ve las reservas por día y puede cambiar su estado:</p>
+<table>
+  <tr><th>Estado</th><th>Significado</th></tr>
+  <tr><td><b>Pendiente</b></td><td>Recién llegó, falta confirmarla.</td></tr>
+  <tr><td><b>Confirmada</b></td><td>El salón la aceptó.</td></tr>
+  <tr><td><b>Completada</b></td><td>El servicio ya se realizó.</td></tr>
+  <tr><td><b>Cancelada</b></td><td>Se anuló (esto <b>libera el cupo</b> de esa hora).</td></tr>
+</table>
+</div>
+
+<!-- ===================== 13 ===================== -->
+<div class="section" id="c13">
+<h1>13. Módulo 5 — Registro diario</h1>
+<p><span class="tag">Archivos</span> <code>src/app/admin/records/page.tsx</code> · <code>src/lib/records.ts</code></p>
+<p>Es la <b>bitácora</b> del día: el salón anota cada servicio que realiza.</p>
+<h3>Cómo funciona</h3>
+<ol>
+  <li>Se elige la fecha, el servicio, la cantidad y (opcional) una nota.</li>
+  <li>Al guardar, el sistema anota una copia del servicio con su precio de ese momento.</li>
+  <li>La pantalla muestra el <b>total de servicios</b> y el <b>total en colones</b> del día.</li>
+</ol>
+<div class="callout">
+  <b>Por qué guarda una copia del precio:</b> así, si mañana se cambia el precio de un servicio, los registros de días anteriores <b>siguen mostrando el precio real</b> que se cobró ese día. Esto hace que los reportes sean confiables.
+</div>
+</div>
+
+<!-- ===================== 14 ===================== -->
+<div class="section" id="c14">
+<h1>14. Módulo 6 — Reportes</h1>
+<p><span class="tag">Archivos</span> <code>src/app/admin/reports/page.tsx</code></p>
+<p>Muestra un resumen de lo que se registró en el módulo anterior.</p>
+<h3>Qué muestra</h3>
+<ul>
+  <li><b>Selector de período:</b> Hoy, Últimos 7 días, Este mes, Mes anterior o un rango personalizado.</li>
+  <li><b>Ingresos totales</b> del período.</li>
+  <li><b>Cantidad de servicios realizados.</b></li>
+  <li><b>Ingresos por categoría:</b> una barra por cada categoría con su monto y porcentaje.</li>
+</ul>
+<h3>Cómo hace los cálculos</h3>
+<p>
+El sistema pide a la base de datos todos los registros del período elegido y los suma con operaciones simples (recorre la lista, va sumando los ingresos y agrupando por categoría). No hay nada guardado "pre-calculado": los números se arman en el momento con la información real.
+</p>
+</div>
+
+<!-- ===================== 15 (NUEVO) ===================== -->
+<div class="section" id="c15">
+<h1>15. Flujo completo del sistema (ejemplo de principio a fin)</h1>
+<p>
+Para entender cómo se conecta <b>todo</b>, sigamos el recorrido de una cita real, desde que la clienta reserva hasta que aparece en los reportes:
+</p>
+<div class="flow">
+  <div class="fstep"><b>El salón carga sus servicios.</b> Desde el módulo de Servicios, el admin crea (o importa) los servicios con sus precios. Se guardan en la colección <code>services</code>.</div>
+  <div class="fstep"><b>Los servicios aparecen en la web.</b> La página pública y el formulario de reservas leen la colección <code>services</code> y muestran los servicios activos.</div>
+  <div class="fstep"><b>La clienta reserva.</b> Entra a "Reservar", elige "Corte &amp; Peinado" para el viernes a las 14:00, deja su nombre y WhatsApp. Se crea un documento en <code>reservations</code> con estado <b>pendiente</b> y se suma 1 al contador de esa hora en <code>slots</code>.</div>
+  <div class="fstep"><b>El admin ve la reserva.</b> En el módulo de Reservas aparece la cita del viernes como "pendiente". El admin la <b>confirma</b>.</div>
+  <div class="fstep"><b>El día de la cita, se completa.</b> Cuando la clienta llega y se atiende, el admin marca la reserva como <b>completada</b>.</div>
+  <div class="fstep"><b>Se anota en el registro diario.</b> El admin registra el servicio realizado ese día en el módulo de Registro diario. Se guarda en <code>records</code> con una copia del precio.</div>
+  <div class="fstep"><b>Aparece en los reportes.</b> En el módulo de Reportes, ese servicio ya suma a los ingresos del día, de la semana y del mes, y al total de la categoría "Cabello".</div>
+</div>
+<div class="callout info">
+  <b>La idea central:</b> cada módulo aporta datos que otro módulo aprovecha. Los servicios alimentan las reservas y el registro; el registro alimenta los reportes. Todo conectado a través de la base de datos.
+</div>
+</div>
+
+<!-- ===================== 16 ===================== -->
+<div class="section" id="c16">
+<h1>16. Seguridad (reglas de la base de datos)</h1>
+<p><span class="tag">Archivo</span> <code>firestore.rules</code></p>
+<p>
+Las <b>reglas</b> definen quién puede leer y escribir cada colección. Se configuran en la consola de Firebase. Este es el resumen:
+</p>
+<table>
+  <tr><th>Colección</th><th>Quién puede leer</th><th>Quién puede escribir</th></tr>
+  <tr><td>services</td><td>Cualquiera (la web muestra los servicios)</td><td>Solo administradores con sesión</td></tr>
+  <tr><td>records</td><td>Solo administradores</td><td>Solo administradores</td></tr>
+  <tr><td>reservations</td><td>Solo administradores</td><td>Las clientas pueden crear; editar solo admins</td></tr>
+  <tr><td>slots</td><td>Cualquiera (solo es un número de cupos)</td><td>Cualquiera (al reservar)</td></tr>
+</table>
+<div class="callout info">
+  Los datos privados de las clientas (nombre, teléfono) <b>no se muestran</b> en la parte pública: solo los administradores los pueden ver.
+</div>
+</div>
+
+<!-- ===================== 17 (NUEVO) ===================== -->
+<div class="section" id="c17">
+<h1>17. Preguntas típicas de la exposición (con respuestas)</h1>
+<p>
+Estas son preguntas que suelen hacer al presentar un proyecto así. Estudiá las respuestas para defenderlo con seguridad.
+</p>
+
+<div class="qa">
+  <p class="q">1. ¿Por qué elegiste Next.js y React?</p>
+  <p class="a">Porque permiten construir páginas modernas y rápidas dividiendo la interfaz en componentes reutilizables. Son de las herramientas más usadas hoy, gratuitas y con mucha documentación.</p>
+</div>
+<div class="qa">
+  <p class="q">2. ¿Por qué usaste Firebase y no una base de datos como MySQL?</p>
+  <p class="a">Firebase incluye la base de datos y el inicio de sesión ya listos, sin tener que programar ni pagar un servidor propio. Para un proyecto de este tamaño simplifica mucho el trabajo y funciona en la nube.</p>
+</div>
+<div class="qa">
+  <p class="q">3. ¿Qué es un componente?</p>
+  <p class="a">Una pieza reutilizable de la interfaz, como un botón o una tarjeta. Se programa una vez y se usa en varios lugares. Por ejemplo, el botón de WhatsApp es un componente que aparece en varias secciones.</p>
+</div>
+<div class="qa">
+  <p class="q">4. ¿Cómo funciona el inicio de sesión? ¿Dónde se guardan las contraseñas?</p>
+  <p class="a">El login usa Firebase Authentication. Las contraseñas no están en mi código ni en mi base de datos: las guarda y verifica Firebase de forma segura. El sistema solo pregunta "¿este correo y contraseña son válidos?".</p>
+</div>
+<div class="qa">
+  <p class="q">5. ¿Qué es el "borrado lógico" y por qué lo usaste?</p>
+  <p class="a">En lugar de borrar un servicio de verdad, lo marco como archivado (un campo <code>active</code> en falso). Así deja de mostrarse pero no se pierde la información, que puede ser necesaria para los reportes históricos.</p>
+</div>
+<div class="qa">
+  <p class="q">6. ¿Cómo evitás que dos clientas reserven el mismo cupo?</p>
+  <p class="a">Cada hora tiene una capacidad y un contador en la colección <code>slots</code>. Antes de guardar una reserva, el sistema revisa cuántos cupos hay ocupados; si ya está lleno, no permite reservar. Al reservar, suma 1 al contador.</p>
+</div>
+<div class="qa">
+  <p class="q">7. ¿Por qué guardás una copia del precio en las reservas y registros?</p>
+  <p class="a">Para que los reportes históricos sean correctos. Si más adelante cambio el precio de un servicio, los registros viejos siguen mostrando el precio real que se cobró ese día.</p>
+</div>
+<div class="qa">
+  <p class="q">8. ¿Qué son las reglas de Firestore?</p>
+  <p class="a">Son las que definen quién puede leer y escribir cada colección. Por ejemplo, cualquiera puede ver los servicios, pero solo un administrador con sesión puede modificarlos, y los datos de las clientas solo los ve el admin.</p>
+</div>
+<div class="qa">
+  <p class="q">9. ¿Las clientas necesitan crear una cuenta para reservar?</p>
+  <p class="a">No. Reservan como invitadas, solo con su nombre y WhatsApp. Esto reduce la fricción y aumenta la probabilidad de que reserven.</p>
+</div>
+<div class="qa">
+  <p class="q">10. ¿Cómo se conectan los módulos entre sí?</p>
+  <p class="a">A través de la base de datos. Los servicios alimentan las reservas y el registro diario; el registro diario alimenta los reportes. (Ver el capítulo 15, "Flujo completo del sistema".)</p>
+</div>
+<div class="qa">
+  <p class="q">11. ¿Qué mejorarías si tuvieras más tiempo?</p>
+  <p class="a">Agregar notificaciones automáticas al salón cuando llega una reserva, protección anti-spam en el formulario (reCAPTCHA), y publicar el sitio en internet para uso real.</p>
+</div>
+<div class="qa">
+  <p class="q">12. ¿La información se pierde si apago la computadora?</p>
+  <p class="a">No. Los datos están en la nube (Firebase), no en la computadora. Apagar el programa solo detiene la página; la información sigue guardada.</p>
+</div>
+</div>
+
+<!-- ===================== 18 ===================== -->
+<div class="section" id="c18">
+<h1>18. Problemas comunes y soluciones</h1>
+<table>
+  <tr><th>Problema</th><th>Solución</th></tr>
+  <tr>
+    <td>Al correr <code>npm run dev</code> dice "command not found".</td>
+    <td>No está instalado Node.js. Repetí el <b>Paso 1</b> del capítulo 4.</td>
+  </tr>
+  <tr>
+    <td>La página dice "No se pudieron cargar los servicios".</td>
+    <td>La base de datos (Firestore) no está creada, o se acaba de crear y tarda unos segundos. Esperá un momento y recargá.</td>
+  </tr>
+  <tr>
+    <td>El inicio de sesión no funciona.</td>
+    <td>Verificá que el usuario exista en Firebase (Authentication → Users) y que el método "Correo/contraseña" esté activado.</td>
+  </tr>
+  <tr>
+    <td>Los servicios aparecen vacíos.</td>
+    <td>Entrá al módulo de Servicios y usá el botón "Importar servicios actuales".</td>
+  </tr>
+  <tr>
+    <td>La página no abre en el navegador.</td>
+    <td>Revisá que la Terminal muestre "Ready" y que estés entrando a <code>http://localhost:3000</code>.</td>
+  </tr>
+  <tr>
+    <td>Cambié el horario o la capacidad y no se refleja.</td>
+    <td>Esos valores están en <code>src/content/site.ts</code> (sección <code>booking</code>). Guardá el archivo y recargá la página.</td>
+  </tr>
+</table>
+
+<div class="callout" style="margin-top:30px; text-align:center;">
+  <b>Fin de la documentación</b><br>
+  Sistema Web — Gaby Salón y Spa
+</div>
+</div>
+
+</body>
+</html>

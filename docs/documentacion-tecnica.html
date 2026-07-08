@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Documentación Técnica - Gaby Salón y Spa</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2430; line-height: 1.55; font-size: 11.5pt; margin: 0;
+  }
+  h1, h2, h3, h4 { color: #8a6d1f; line-height: 1.25; }
+  h1 { font-size: 21pt; border-bottom: 3px solid #c9a84c; padding-bottom: 6px; margin-top: 0; }
+  h2 { font-size: 15pt; margin-top: 22px; border-bottom: 1px solid #e3d5a8; padding-bottom: 3px; }
+  h3 { font-size: 12.5pt; margin-top: 16px; color: #6b5416; }
+  h4 { font-size: 11.5pt; margin-top: 12px; color: #4a4a4a; }
+  p { margin: 7px 0; }
+  code {
+    font-family: "SF Mono", Consolas, monospace;
+    background: #f3efe2; color: #7a5f14; padding: 1px 5px; border-radius: 4px; font-size: 10pt;
+  }
+  pre {
+    background: #1f1c14; color: #f5f0dc; padding: 12px 14px; border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace; font-size: 8.8pt;
+    line-height: 1.45; overflow-x: auto; white-space: pre-wrap;
+  }
+  pre .c { color: #9a8f6a; } /* comentario */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 10pt; }
+  th, td { border: 1px solid #d9cfa8; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f3edd8; color: #6b5416; }
+  tr:nth-child(even) td { background: #faf7ee; }
+  .cover {
+    height: 258mm; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center; page-break-after: always;
+  }
+  .cover h1 { font-size: 28pt; border: none; color: #6b5416; }
+  .cover .sub { font-size: 13pt; color: #8a7a55; margin-top: 4px; }
+  .cover .meta { margin-top: 40px; font-size: 11pt; color: #666; }
+  .section { page-break-before: always; }
+  .callout { background: #fbf6e4; border-left: 4px solid #c9a84c; padding: 9px 13px; border-radius: 6px; margin: 12px 0; }
+  .callout.info { background: #eef4fb; border-left-color: #4a80c0; }
+  .callout.warn { background: #fdf0e6; border-left-color: #d98a3a; }
+  .callout.def { background: #f0f7f0; border-left-color: #4a9a5a; }
+  ul, ol { margin: 7px 0 7px 4px; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .toc a { color: #1f2430; text-decoration: none; }
+  .toc li { margin: 5px 0; }
+  .tag { display: inline-block; background: #f3edd8; color: #6b5416; padding: 1px 8px; border-radius: 10px; font-size: 9pt; font-weight: 600; }
+  .footnote { color: #888; font-size: 9.5pt; }
+  .def b { color: #2f6b3a; }
+</style>
+</head>
+<body>
+
+<!-- ===================== PORTADA ===================== -->
+<div class="cover">
+  <h1>Sistema Web<br>Gaby Salón y Spa</h1>
+  <div class="sub">Documentación TÉCNICA completa</div>
+  <div class="sub" style="font-size:11pt; margin-top:18px; max-width:72%;">
+    Explicación profunda de la arquitectura, el código y el funcionamiento interno.
+    Cada concepto se explica desde cero: no se asume conocimiento previo de
+    programación, frameworks, librerías ni Firebase.
+  </div>
+  <div class="meta">
+    Next.js · React · TypeScript · Tailwind CSS · Firebase (Auth + Firestore)
+  </div>
+</div>
+
+<!-- ===================== ÍNDICE ===================== -->
+<h1>Índice</h1>
+<ol class="toc">
+  <li><a href="#c1">Introducción y visión general de la arquitectura</a></li>
+  <li><a href="#c2">Conceptos fundamentales explicados desde cero</a></li>
+  <li><a href="#c3">Arquitectura por capas del sistema</a></li>
+  <li><a href="#c4">Estructura completa de archivos</a></li>
+  <li><a href="#c5">Archivos de configuración</a></li>
+  <li><a href="#c6">Punto de entrada: layout y página principal</a></li>
+  <li><a href="#c7">Sistema de rutas de Next.js</a></li>
+  <li><a href="#c8">Capa de conexión a Firebase (firebase.ts)</a></li>
+  <li><a href="#c9">Capa de datos: servicios (services.ts)</a></li>
+  <li><a href="#c10">Capa de datos: registro diario (records.ts)</a></li>
+  <li><a href="#c11">Capa de datos: reservas y control de cupos (booking.ts)</a></li>
+  <li><a href="#c12">Modelo de datos en Firestore</a></li>
+  <li><a href="#c13">Autenticación y protección de rutas</a></li>
+  <li><a href="#c14">Componentes del sitio público</a></li>
+  <li><a href="#c15">Componentes reutilizables</a></li>
+  <li><a href="#c16">Módulos del panel de administración</a></li>
+  <li><a href="#c17">Sistema de estilos (Tailwind y CSS global)</a></li>
+  <li><a href="#c18">Reglas de seguridad de Firestore</a></li>
+  <li><a href="#c19">Ciclo de vida de un dato (flujo técnico)</a></li>
+  <li><a href="#c20">Glosario técnico</a></li>
+  <li><a href="#c21">Cómo extender el proyecto (agregar un módulo)</a></li>
+</ol>
+
+<!-- ===================== 1 ===================== -->
+<div class="section" id="c1">
+<h1>1. Introducción y visión general</h1>
+<p>
+Este sistema es una <b>aplicación web</b> construida con <b>Next.js</b> (un framework de React) y <b>Firebase</b> (servicios de backend de Google). Tiene dos frentes: un <b>sitio público</b> informativo con reservas, y un <b>panel de administración</b> protegido por login.
+</p>
+<p>La idea central de la arquitectura es la <b>separación en capas</b>:</p>
+<ul>
+  <li><b>Capa de presentación (UI):</b> las páginas y componentes visuales (carpeta <code>src/app</code> y <code>src/components</code>).</li>
+  <li><b>Capa de datos (lógica de acceso):</b> funciones que hablan con la base de datos (carpeta <code>src/lib</code>).</li>
+  <li><b>Capa de persistencia (backend):</b> Firebase, que guarda los datos (Firestore) y valida usuarios (Authentication).</li>
+</ul>
+<p>
+La UI <b>nunca</b> habla directamente con Firebase: siempre pasa por la capa de datos (<code>src/lib</code>). Esto mantiene el código ordenado y fácil de mantener.
+</p>
+</div>
+
+<!-- ===================== 2 ===================== -->
+<div class="section" id="c2">
+<h1>2. Conceptos fundamentales (desde cero)</h1>
+<p>Antes de ver el código, hay que entender las piezas. Cada una explicada sin asumir conocimiento previo.</p>
+
+<h3>2.1 HTML, CSS y JavaScript</h3>
+<p>Son los 3 lenguajes base de toda página web:</p>
+<ul>
+  <li><b>HTML:</b> define la <b>estructura</b> (títulos, párrafos, botones). Es el "esqueleto".</li>
+  <li><b>CSS:</b> define el <b>diseño</b> (colores, tamaños, posiciones). Es la "ropa".</li>
+  <li><b>JavaScript:</b> define el <b>comportamiento</b> (qué pasa al hacer clic, cargar datos). Es el "movimiento".</li>
+</ul>
+
+<h3>2.2 TypeScript</h3>
+<div class="callout def"><b>Definición:</b> TypeScript es JavaScript con <b>tipos</b>. Un "tipo" indica qué clase de dato es una variable (texto, número, verdadero/falso).</div>
+<p>Ejemplo: al escribir <code>price: number</code> le decimos al programa que <code>price</code> siempre será un número. Si por error se le asigna un texto, el editor avisa <b>antes</b> de ejecutar. Esto previene errores. Los archivos TypeScript terminan en <code>.ts</code> (o <code>.tsx</code> si contienen HTML).</p>
+
+<h3>2.3 React</h3>
+<div class="callout def"><b>Definición:</b> React es una librería para construir interfaces dividiéndolas en <b>componentes</b>: piezas independientes y reutilizables.</div>
+<p>Conceptos clave de React que aparecen en todo el proyecto:</p>
+<table>
+  <tr><th>Concepto</th><th>Qué es</th></tr>
+  <tr><td><b>Componente</b></td><td>Una función que devuelve la interfaz (con JSX). Ej: <code>Navbar()</code>.</td></tr>
+  <tr><td><b>JSX</b></td><td>Sintaxis que mezcla HTML dentro de JavaScript. Ej: <code>&lt;button&gt;Reservar&lt;/button&gt;</code>.</td></tr>
+  <tr><td><b>Props</b></td><td>Los "parámetros" que recibe un componente para personalizarlo.</td></tr>
+  <tr><td><b>Estado (state)</b></td><td>Datos que cambian con el tiempo y hacen que la pantalla se redibuje. Se maneja con <code>useState</code>.</td></tr>
+  <tr><td><b>Hook</b></td><td>Función especial de React que empieza con "use". Ej: <code>useState</code>, <code>useEffect</code>.</td></tr>
+</table>
+<p><b>useState</b> guarda un valor que puede cambiar. <b>useEffect</b> ejecuta código cuando el componente aparece o cuando cambia algo (ej: cargar datos al abrir la pantalla).</p>
+<pre><span class="c">// Ejemplo de estado: guardar el texto de un campo</span>
+const [email, setEmail] = useState("");
+<span class="c">// email = valor actual; setEmail = función para cambiarlo</span></pre>
+
+<h3>2.4 Next.js</h3>
+<div class="callout def"><b>Definición:</b> Next.js es un <b>framework</b> construido sobre React que agrega organización de páginas por carpetas, optimizaciones y herramientas listas para usar.</div>
+<p>Lo más importante que usa este proyecto:</p>
+<ul>
+  <li><b>App Router:</b> cada carpeta dentro de <code>src/app</code> con un archivo <code>page.tsx</code> se convierte en una <b>página con su propia dirección (URL)</b>. Ej: <code>src/app/reservar/page.tsx</code> → <code>/reservar</code>.</li>
+  <li><b>"use client":</b> una línea al inicio de un archivo que indica que ese componente corre en el navegador (necesario para usar estado, clics, etc.).</li>
+</ul>
+
+<h3>2.5 Tailwind CSS</h3>
+<div class="callout def"><b>Definición:</b> Tailwind es una forma de escribir CSS usando <b>clases cortas</b> directamente en el HTML, en vez de archivos de estilos separados.</div>
+<p>Ejemplo: <code>class="flex items-center gap-3"</code> significa "poné los elementos en fila, centrados verticalmente, con separación". Cada clase hace una cosa concreta.</p>
+
+<h3>2.6 Node.js y npm</h3>
+<ul>
+  <li><b>Node.js:</b> permite ejecutar JavaScript fuera del navegador (necesario para desarrollar).</li>
+  <li><b>npm:</b> el administrador de paquetes. Con <code>npm install</code> descarga las librerías; con <code>npm run dev</code> arranca el proyecto.</li>
+</ul>
+
+<h3>2.7 Firebase</h3>
+<div class="callout def"><b>Definición:</b> Firebase es un conjunto de servicios en la nube de Google. Este proyecto usa dos: <b>Authentication</b> (login) y <b>Cloud Firestore</b> (base de datos).</div>
+<p><b>Firestore</b> es una base de datos "NoSQL de documentos": en vez de tablas y filas (como SQL), guarda <b>colecciones</b> (grupos) que contienen <b>documentos</b> (fichas con campos tipo <code>clave: valor</code>). Es flexible y funciona en tiempo real.</p>
+</div>
+
+<!-- ===================== 3 ===================== -->
+<div class="section" id="c3">
+<h1>3. Arquitectura por capas</h1>
+<p>Este es el recorrido que hace la información, de arriba (usuario) hacia abajo (base de datos):</p>
+<pre>┌─────────────────────────────────────────────┐
+│  USUARIO (navegador)                         │
+│  Escribe, hace clic, mira la pantalla         │
+└───────────────┬─────────────────────────────┘
+                │
+┌───────────────▼─────────────────────────────┐
+│  CAPA DE PRESENTACIÓN (UI)                   │
+│  src/app  y  src/components                  │
+│  Páginas y componentes de React              │
+└───────────────┬─────────────────────────────┘
+                │  llama funciones
+┌───────────────▼─────────────────────────────┐
+│  CAPA DE DATOS (lógica de acceso)            │
+│  src/lib  →  firebase.ts, services.ts,       │
+│              records.ts, booking.ts          │
+└───────────────┬─────────────────────────────┘
+                │  usa el SDK de Firebase
+┌───────────────▼─────────────────────────────┐
+│  FIREBASE (nube de Google)                   │
+│  Authentication (login) + Firestore (datos)  │
+└─────────────────────────────────────────────┘</pre>
+<p><b>Regla de oro del proyecto:</b> los componentes de la UI llaman a funciones de <code>src/lib</code>, y solo esas funciones tocan Firebase. Así, si algún día se cambia la base de datos, solo hay que modificar <code>src/lib</code> y no todas las pantallas.</p>
+</div>
+
+<!-- ===================== 4 ===================== -->
+<div class="section" id="c4">
+<h1>4. Estructura completa de archivos</h1>
+<pre>GabySalaon/
+├── public/images/          <span class="c">imágenes y fotos</span>
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx       <span class="c">plantilla global (fuentes, metadatos)</span>
+│   │   ├── page.tsx         <span class="c">página principal (arma las secciones)</span>
+│   │   ├── globals.css      <span class="c">estilos globales y clases propias</span>
+│   │   ├── reservar/
+│   │   │   └── page.tsx     <span class="c">formulario público de reservas</span>
+│   │   └── admin/
+│   │       ├── page.tsx             <span class="c">panel principal</span>
+│   │       ├── login/page.tsx       <span class="c">inicio de sesión</span>
+│   │       ├── services/page.tsx    <span class="c">gestión de servicios</span>
+│   │       ├── reservations/page.tsx<span class="c">gestión de reservas</span>
+│   │       ├── records/page.tsx     <span class="c">registro diario</span>
+│   │       └── reports/page.tsx     <span class="c">reportes</span>
+│   ├── components/
+│   │   ├── navbar.tsx, footer.tsx
+│   │   ├── service-picker.tsx       <span class="c">combobox de servicios</span>
+│   │   ├── whatsapp-icon.tsx, whatsapp-floating.tsx
+│   │   ├── section-shell.tsx, utils.ts
+│   │   └── sections/                <span class="c">secciones de la home</span>
+│   │       ├── hero.tsx, about.tsx, services.tsx
+│   │       ├── gallery.tsx, testimonials.tsx, contact.tsx
+│   ├── content/
+│   │   └── site.ts          <span class="c">datos del salón y configuración</span>
+│   └── lib/
+│       ├── firebase.ts      <span class="c">conexión a Firebase</span>
+│       ├── services.ts      <span class="c">funciones de servicios</span>
+│       ├── records.ts       <span class="c">funciones de registro diario</span>
+│       └── booking.ts       <span class="c">funciones de reservas</span>
+├── firestore.rules          <span class="c">reglas de seguridad</span>
+├── .env.local               <span class="c">llaves privadas (no se sube)</span>
+├── package.json             <span class="c">dependencias y comandos</span>
+├── next.config.mjs, tsconfig.json, tailwind.config.ts</pre>
+</div>
+
+<!-- ===================== 5 ===================== -->
+<div class="section" id="c5">
+<h1>5. Archivos de configuración</h1>
+
+<h3>package.json</h3>
+<p>Lista las <b>dependencias</b> (librerías que usa el proyecto) y los <b>comandos</b>:</p>
+<pre><span class="c">// comandos disponibles</span>
+"dev":   "next dev"    <span class="c">→ arranca en modo desarrollo</span>
+"build": "next build"  <span class="c">→ compila para producción</span>
+"start": "next start"  <span class="c">→ corre la versión compilada</span></pre>
+<p>Dependencias principales: <code>next</code>, <code>react</code>, <code>firebase</code>, <code>framer-motion</code>, <code>lucide-react</code>, <code>tailwindcss</code>.</p>
+
+<h3>next.config.mjs</h3>
+<pre>const nextConfig = { images: { unoptimized: true } };</pre>
+<p>Configura Next.js. <code>images: unoptimized</code> le dice que no procese las imágenes automáticamente (útil para exportar el sitio como archivos estáticos).</p>
+
+<h3>tsconfig.json</h3>
+<p>Configura TypeScript. Lo más relevante es el "alias" de rutas:</p>
+<pre>"paths": { "@/*": ["./src/*"] }</pre>
+<p>Esto permite escribir <code>@/lib/firebase</code> en vez de rutas largas como <code>../../lib/firebase</code>. El <code>@</code> significa "la carpeta src".</p>
+
+<h3>.env.local</h3>
+<p>Guarda las llaves de Firebase como <b>variables de entorno</b>. Todas empiezan con <code>NEXT_PUBLIC_</code>, lo que en Next.js significa que estarán disponibles en el navegador:</p>
+<pre>NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+<span class="c">(y las demás llaves)</span></pre>
+<div class="callout warn"><b>Seguridad:</b> este archivo está listado en <code>.gitignore</code>, por eso nunca se sube a GitHub.</div>
+</div>
+
+<!-- ===================== 6 ===================== -->
+<div class="section" id="c6">
+<h1>6. Punto de entrada: layout y página principal</h1>
+
+<h3>src/app/layout.tsx</h3>
+<p>Es la <b>plantilla</b> que envuelve a todas las páginas. Define el idioma, las fuentes tipográficas y los <b>metadatos</b> (título y descripción que ve Google y las redes sociales).</p>
+<pre><span class="c">// carga dos fuentes de Google</span>
+const inter = Inter({ subsets: ["latin"] });
+const playfair = Playfair_Display({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Gaby Salón y Spa | ...",
+  description: "Salón y spa profesional en Alajuela...",
+};</pre>
+
+<h3>src/app/page.tsx</h3>
+<p>Es la <b>página principal</b>. Solo arma las secciones en orden, como piezas de lego:</p>
+<pre>export default function Page() {
+  return (
+    &lt;main&gt;
+      &lt;Navbar /&gt;
+      &lt;Hero /&gt;
+      &lt;About /&gt;
+      &lt;Services /&gt;
+      &lt;Gallery /&gt;
+      &lt;Testimonials /&gt;
+      &lt;Contact /&gt;
+      &lt;Footer /&gt;
+      &lt;WhatsAppFloating /&gt;
+    &lt;/main&gt;
+  );
+}</pre>
+<p>Cada <code>&lt;Componente /&gt;</code> es una sección definida en su propio archivo. Esto hace el código modular y fácil de leer.</p>
+</div>
+
+<!-- ===================== 7 ===================== -->
+<div class="section" id="c7">
+<h1>7. Sistema de rutas de Next.js</h1>
+<p>Next.js convierte <b>carpetas en direcciones (URLs)</b> automáticamente. Cada carpeta con un <code>page.tsx</code> es una página:</p>
+<table>
+  <tr><th>Archivo</th><th>Dirección (URL)</th></tr>
+  <tr><td>src/app/page.tsx</td><td>/</td></tr>
+  <tr><td>src/app/reservar/page.tsx</td><td>/reservar</td></tr>
+  <tr><td>src/app/admin/page.tsx</td><td>/admin</td></tr>
+  <tr><td>src/app/admin/login/page.tsx</td><td>/admin/login</td></tr>
+  <tr><td>src/app/admin/services/page.tsx</td><td>/admin/services</td></tr>
+  <tr><td>src/app/admin/reservations/page.tsx</td><td>/admin/reservations</td></tr>
+  <tr><td>src/app/admin/records/page.tsx</td><td>/admin/records</td></tr>
+  <tr><td>src/app/admin/reports/page.tsx</td><td>/admin/reports</td></tr>
+</table>
+<p>No hay que configurar nada: crear la carpeta y el archivo es suficiente para tener una nueva página.</p>
+</div>
+
+<!-- ===================== 8 ===================== -->
+<div class="section" id="c8">
+<h1>8. Capa de conexión a Firebase (firebase.ts)</h1>
+<p><span class="tag">Archivo</span> <code>src/lib/firebase.ts</code></p>
+<p>Este archivo <b>inicializa</b> Firebase una sola vez y entrega dos objetos que el resto del proyecto usa: <code>auth</code> (login) y <code>db</code> (base de datos).</p>
+<pre><span class="c">// arma la configuración leyendo las llaves del .env.local</span>
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  <span class="c">/* ...las demás llaves... */</span>
+};
+
+<span class="c">// evita inicializar dos veces (importante con la recarga automática)</span>
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);   <span class="c">// servicio de login</span>
+export const db   = getFirestore(app); <span class="c">// base de datos</span></pre>
+<p><b>Detalle técnico:</b> <code>getApps().length ? getApp() : initializeApp(...)</code> es un patrón "singleton": si Firebase ya fue inicializado, lo reutiliza; si no, lo crea. Esto evita errores durante el desarrollo, cuando el código se recarga muchas veces.</p>
+</div>
+
+<!-- ===================== 9 ===================== -->
+<div class="section" id="c9">
+<h1>9. Capa de datos: servicios (services.ts)</h1>
+<p><span class="tag">Archivo</span> <code>src/lib/services.ts</code></p>
+<p>Contiene todo lo necesario para trabajar con los servicios en Firestore.</p>
+
+<h3>El tipo de dato</h3>
+<pre>export type Service = {
+  id: string;        <span class="c">// identificador único</span>
+  category: string;  <span class="c">// Cabello, Uñas, Spa &amp; Estética</span>
+  name: string;
+  desc: string;
+  price: number;
+  order?: number;    <span class="c">// el "?" = campo opcional</span>
+  active?: boolean;  <span class="c">// true = visible, false = archivado</span>
+};</pre>
+
+<h3>Leer servicios</h3>
+<pre><span class="c">// trae TODOS (para el panel admin)</span>
+export async function fetchServices() {
+  const snap = await getDocs(collection(db, "services"));
+  return snap.docs.map((d) =&gt; ({ id: d.id, ...d.data() }));
+}
+
+<span class="c">// trae solo los ACTIVOS (para el sitio público)</span>
+export async function fetchActiveServices() {
+  const q = query(collection(db, "services"), where("active", "==", true));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) =&gt; ({ id: d.id, ...d.data() }));
+}</pre>
+<p><b>Conceptos:</b> <code>collection(db, "services")</code> apunta a la colección; <code>getDocs</code> descarga los documentos; <code>query(..., where("active","==",true))</code> filtra solo los activos. La palabra <code>await</code> significa "esperá a que termine antes de seguir" (porque pedir datos toma tiempo).</p>
+
+<h3>Crear, editar y archivar</h3>
+<pre>export async function addService(data)   { return addDoc(collection(db,"services"), {active:true, ...data}); }
+export async function updateService(id, data) { return updateDoc(doc(db,"services",id), data); }
+export async function archiveService(id) { return updateDoc(doc(db,"services",id), {active:false}); } <span class="c">// borrado lógico</span>
+export async function restoreService(id) { return updateDoc(doc(db,"services",id), {active:true}); }</pre>
+<div class="callout"><b>Borrado lógico:</b> <code>archiveService</code> no elimina el documento; solo cambia <code>active</code> a <code>false</code>. Así el dato se conserva para los reportes.</div>
+
+<h3>Agrupar por categoría</h3>
+<p>Convierte la lista plana de servicios en grupos por categoría, usando bucles simples:</p>
+<pre>export function groupByCategory(services) {
+  const grupos = [];
+  for (const s of services) {
+    let grupo = grupos.find((g) =&gt; g.category === s.category);
+    if (!grupo) { grupo = { category: s.category, items: [] }; grupos.push(grupo); }
+    grupo.items.push(s);
+  }
+  return grupos;
+}</pre>
+</div>
+
+<!-- ===================== 10 ===================== -->
+<div class="section" id="c10">
+<h1>10. Capa de datos: registro diario (records.ts)</h1>
+<p><span class="tag">Archivo</span> <code>src/lib/records.ts</code></p>
+<p>Maneja la bitácora de servicios realizados por día.</p>
+<pre>export type ServiceRecord = {
+  id: string; date: string; serviceName: string;
+  category: string; price: number; quantity: number; note?: string;
+};
+
+<span class="c">// fecha de hoy en formato AAAA-MM-DD</span>
+export function todayStr() { return new Date().toLocaleDateString("en-CA"); }
+
+export async function addRecord(data) { return addDoc(collection(db,"records"), data); }
+
+<span class="c">// registros de un día exacto</span>
+export async function fetchRecordsByDate(date) {
+  const q = query(collection(db,"records"), where("date","==",date));
+  return (await getDocs(q)).docs.map(d =&gt; ({ id:d.id, ...d.data() }));
+}
+
+<span class="c">// registros entre dos fechas (para los reportes)</span>
+export async function fetchRecordsBetween(from, to) {
+  const q = query(collection(db,"records"), where("date",">=",from), where("date","&lt;=",to));
+  return (await getDocs(q)).docs.map(d =&gt; ({ id:d.id, ...d.data() }));
+}</pre>
+<div class="callout info"><b>Truco de las fechas:</b> se guardan como texto <code>AAAA-MM-DD</code> (ej: "2026-07-08"). En ese formato, comparar fechas como texto (<code>&gt;=</code>, <code>&lt;=</code>) funciona igual que comparar fechas reales, lo que permite filtrar por rango sin complicaciones.</div>
+</div>
+
+<!-- ===================== 11 ===================== -->
+<div class="section" id="c11">
+<h1>11. Capa de datos: reservas y control de cupos (booking.ts)</h1>
+<p><span class="tag">Archivo</span> <code>src/lib/booking.ts</code></p>
+<p>Es la parte más elaborada: maneja reservas y evita que se reserve de más.</p>
+
+<h3>Generar las horas disponibles</h3>
+<p>A partir del horario del salón (definido en <code>site.ts</code>), calcula las franjas de un día:</p>
+<pre>export function slotsForDate(dateStr) {
+  const diaSemana = new Date(dateStr + "T00:00:00").getDay(); <span class="c">// 0=domingo</span>
+  const horario = HOURS[diaSemana];
+  if (!horario) return [];   <span class="c">// cerrado</span>
+  const horas = [];
+  let minuto = horaAMinutos(horario.open);      <span class="c">// ej: 8:00 → 480</span>
+  const cierre = horaAMinutos(horario.close);
+  while (minuto + SLOT_MIN &lt;= cierre) {          <span class="c">// SLOT_MIN = 60</span>
+    horas.push(minutosAHora(minuto));           <span class="c">// 480 → "08:00"</span>
+    minuto += SLOT_MIN;
+  }
+  return horas;
+}</pre>
+
+<h3>Crear una reserva sin doble-reservar</h3>
+<p>Se usa una colección aparte, <code>slots</code>, con un <b>contador</b> por hora. Antes de guardar, se revisa ese contador:</p>
+<pre>export async function createReservation(data) {
+  const id = data.date + "_" + data.time;        <span class="c">// ej: "2026-07-10_14:00"</span>
+  const slotRef = doc(db, "slots", id);
+
+  <span class="c">// 1) revisar cuántos cupos hay ocupados en esa hora</span>
+  const slotSnap = await getDoc(slotRef);
+  const ocupados = slotSnap.exists() ? slotSnap.data().count : 0;
+  if (ocupados &gt;= CAPACITY) throw new Error("FULL"); <span class="c">// CAPACITY = 2</span>
+
+  <span class="c">// 2) guardar la reserva como "pendiente"</span>
+  await addDoc(collection(db,"reservations"), { ...data, slotId:id, status:"pendiente" });
+
+  <span class="c">// 3) sumar 1 al contador de esa hora</span>
+  await setDoc(slotRef, { date:data.date, time:data.time, count: ocupados + 1 }, { merge:true });
+}</pre>
+<div class="callout info"><b>¿Por qué una colección de contadores y no contar reservas?</b> Porque las reglas de seguridad no dejan que el público lea las reservas de otras clientas (privacidad). El contador de <code>slots</code> solo guarda un número, sin datos personales, así que sí puede ser público para mostrar la disponibilidad.</div>
+
+<h3>Cambiar estado y liberar cupos</h3>
+<pre>export async function setReservationStatus(id, nuevoEstado) {
+  const reserva = (await getDoc(doc(db,"reservations",id))).data();
+  await updateDoc(doc(db,"reservations",id), { status: nuevoEstado });
+
+  const estabaActiva = reserva.status !== "cancelada";
+  const quedaActiva  = nuevoEstado !== "cancelada";
+  if (estabaActiva &amp;&amp; !quedaActiva) cambiarContador(reserva.slotId, -1); <span class="c">// canceló → libera</span>
+  if (!estabaActiva &amp;&amp; quedaActiva) cambiarContador(reserva.slotId, +1); <span class="c">// reactivó → ocupa</span>
+}</pre>
+</div>
+
+<!-- ===================== 12 ===================== -->
+<div class="section" id="c12">
+<h1>12. Modelo de datos en Firestore</h1>
+<p>Cuatro colecciones. Cada documento es una ficha con estos campos:</p>
+
+<h3><code>services</code></h3>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td>category</td><td>texto</td><td>Categoría del servicio</td></tr>
+  <tr><td>name / desc</td><td>texto</td><td>Nombre y descripción</td></tr>
+  <tr><td>price</td><td>número</td><td>Precio en colones</td></tr>
+  <tr><td>order</td><td>número</td><td>Orden de aparición</td></tr>
+  <tr><td>active</td><td>booleano</td><td>true=visible, false=archivado</td></tr>
+</table>
+
+<h3><code>reservations</code></h3>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td>date / time</td><td>texto</td><td>Fecha y hora de la cita</td></tr>
+  <tr><td>serviceName / category</td><td>texto</td><td>Copia del servicio</td></tr>
+  <tr><td>price</td><td>número</td><td>Precio al reservar</td></tr>
+  <tr><td>customerName / customerPhone</td><td>texto</td><td>Datos de la clienta</td></tr>
+  <tr><td>status</td><td>texto</td><td>pendiente / confirmada / completada / cancelada</td></tr>
+  <tr><td>slotId</td><td>texto</td><td>Enlace al contador de la hora</td></tr>
+</table>
+
+<h3><code>slots</code></h3>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td>date / time</td><td>texto</td><td>Hora exacta</td></tr>
+  <tr><td>count</td><td>número</td><td>Cupos ocupados en esa hora</td></tr>
+</table>
+
+<h3><code>records</code></h3>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td>date</td><td>texto</td><td>Día del servicio</td></tr>
+  <tr><td>serviceName / category</td><td>texto</td><td>Copia del servicio</td></tr>
+  <tr><td>price / quantity</td><td>número</td><td>Precio y cantidad</td></tr>
+  <tr><td>note</td><td>texto</td><td>Nota opcional</td></tr>
+</table>
+<div class="callout"><b>Nota de diseño (desnormalización):</b> las reservas y registros guardan una <b>copia</b> del nombre y precio del servicio, en vez de solo un enlace. Así, aunque el servicio original cambie o se archive, los datos históricos permanecen exactos. Es una decisión intencional para que los reportes sean confiables.</div>
+</div>
+
+<!-- ===================== 13 ===================== -->
+<div class="section" id="c13">
+<h1>13. Autenticación y protección de rutas</h1>
+<p><span class="tag">Archivos</span> <code>src/app/admin/login/page.tsx</code> y cada página de <code>admin/</code></p>
+
+<h3>Iniciar sesión</h3>
+<pre>import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+
+await signInWithEmailAndPassword(auth, email, password);
+<span class="c">// si el correo/contraseña son válidos, entra; si no, lanza un error</span></pre>
+
+<h3>Proteger las páginas del panel</h3>
+<p>Cada pantalla del panel comprueba si hay una sesión activa. Si no, redirige al login:</p>
+<pre>useEffect(() =&gt; {
+  const unsub = onAuthStateChanged(auth, (usuario) =&gt; {
+    if (!usuario) router.replace("/admin/login"); <span class="c">// sin sesión → afuera</span>
+    else setChecking(false);                        <span class="c">// con sesión → muestra</span>
+  });
+  return () =&gt; unsub();  <span class="c">// deja de escuchar al salir</span>
+}, []);</pre>
+<p><b>Conceptos:</b> <code>onAuthStateChanged</code> "escucha" el estado de sesión y avisa cuando cambia. <code>useEffect</code> ejecuta esto al abrir la pantalla. <code>router.replace</code> cambia de página. La función devuelta (<code>unsub</code>) se ejecuta al salir, para dejar de escuchar y no consumir recursos.</p>
+<div class="callout info">Las contraseñas nunca pasan por el código propio ni se guardan en Firestore: las gestiona Firebase Authentication.</div>
+</div>
+
+<!-- ===================== 14 ===================== -->
+<div class="section" id="c14">
+<h1>14. Componentes del sitio público</h1>
+<p><span class="tag">Carpeta</span> <code>src/components/sections/</code></p>
+<p>Cada sección de la home es un componente independiente. La más técnica es <b>Services</b>, porque carga datos de Firebase:</p>
+<pre><span class="c">// services.tsx (resumido)</span>
+const [groups, setGroups] = useState(fallbackGroups); <span class="c">// datos de respaldo</span>
+
+useEffect(() =&gt; {
+  fetchActiveServices().then((lista) =&gt; {
+    if (lista.length &gt; 0) setGroups(groupByCategory(lista));
+  }).catch(() =&gt; { /* si falla, se queda el respaldo */ });
+}, []);</pre>
+<p><b>Patrón importante:</b> arranca con una lista de respaldo (escrita en <code>site.ts</code>) y, cuando Firebase responde, la reemplaza por los datos reales. Si Firebase falla, la página igual muestra algo. Esto se llama "degradación elegante".</p>
+<table>
+  <tr><th>Componente</th><th>Técnica que usa</th></tr>
+  <tr><td>navbar.tsx</td><td>Estado para el menú móvil; detecta scroll con useEffect.</td></tr>
+  <tr><td>hero.tsx</td><td>Animaciones de entrada con Framer Motion.</td></tr>
+  <tr><td>gallery.tsx</td><td>Estado para abrir/cerrar la imagen ampliada (modal).</td></tr>
+  <tr><td>testimonials.tsx</td><td>Carrusel automático con un temporizador (setInterval).</td></tr>
+</table>
+</div>
+
+<!-- ===================== 15 ===================== -->
+<div class="section" id="c15">
+<h1>15. Componentes reutilizables</h1>
+<table>
+  <tr><th>Componente</th><th>Qué hace</th></tr>
+  <tr><td><code>service-picker.tsx</code></td><td>Combobox personalizado para elegir un servicio, agrupado por categoría.</td></tr>
+  <tr><td><code>whatsapp-icon.tsx</code></td><td>El logo de WhatsApp como imagen SVG (para los botones).</td></tr>
+  <tr><td><code>section-shell.tsx</code></td><td>"Molde" con título y descripción que reutilizan las secciones.</td></tr>
+  <tr><td><code>utils.ts</code></td><td>Función <code>cn()</code> que junta clases de CSS condicionalmente.</td></tr>
+</table>
+
+<h3>Detalle técnico: cerrar el combobox al hacer clic afuera</h3>
+<p>El <code>service-picker</code> usa una <b>referencia</b> al elemento y escucha los clics del documento:</p>
+<pre>const boxRef = useRef(null);  <span class="c">// referencia al recuadro</span>
+
+useEffect(() =&gt; {
+  function alClicAfuera(e) {
+    if (boxRef.current &amp;&amp; !boxRef.current.contains(e.target)) setOpen(false);
+  }
+  document.addEventListener("mousedown", alClicAfuera);
+  return () =&gt; document.removeEventListener("mousedown", alClicAfuera);
+}, []);</pre>
+<p><b>Cómo funciona:</b> <code>useRef</code> guarda una referencia al recuadro del combobox. Cada clic en la página se revisa: si fue <b>fuera</b> del recuadro, se cierra. Al desmontar el componente, se quita el "escucha" para no dejar código corriendo de más.</p>
+</div>
+
+<!-- ===================== 16 ===================== -->
+<div class="section" id="c16">
+<h1>16. Módulos del panel de administración</h1>
+<p>Todos siguen el mismo patrón técnico:</p>
+<ol>
+  <li><b>Guardia de sesión</b> con <code>onAuthStateChanged</code> (capítulo 13).</li>
+  <li><b>Estado</b> (<code>useState</code>) para los datos y los campos del formulario.</li>
+  <li><b>Carga de datos</b> con <code>useEffect</code> al abrir la pantalla, llamando a funciones de <code>src/lib</code>.</li>
+  <li><b>Acciones</b> (crear, editar, cambiar estado) que llaman a <code>src/lib</code> y vuelven a cargar la lista.</li>
+</ol>
+
+<h3>Servicios (services/page.tsx)</h3>
+<p>Un formulario que sirve para crear <b>y</b> editar (si hay un <code>editingId</code>, guarda cambios; si no, crea). Lista los activos y, aparte, los archivados con opción de restaurar.</p>
+
+<h3>Reservas (reservations/page.tsx)</h3>
+<p>Muestra las reservas de un día y botones para cambiar el estado. Cada botón llama a <code>setReservationStatus</code>, que además ajusta el contador de cupos.</p>
+
+<h3>Registro diario (records/page.tsx)</h3>
+<p>Formulario para anotar servicios realizados. Calcula en vivo el total del día sumando <code>precio × cantidad</code> con un bucle simple.</p>
+
+<h3>Reportes (reports/page.tsx)</h3>
+<p>Pide los registros de un rango de fechas y calcula los totales en el momento:</p>
+<pre>let totalRevenue = 0, totalCount = 0;
+for (const r of records) {
+  totalRevenue += r.price * r.quantity;
+  totalCount   += r.quantity;
+}
+<span class="c">// luego agrupa por categoría con otro bucle</span></pre>
+</div>
+
+<!-- ===================== 17 ===================== -->
+<div class="section" id="c17">
+<h1>17. Sistema de estilos (Tailwind y CSS global)</h1>
+<p>El diseño combina dos técnicas:</p>
+<ul>
+  <li><b>Clases de Tailwind</b> directamente en los elementos, para estilos puntuales. Ej: <code>class="rounded-2xl bg-black/60 px-4 py-3"</code>.</li>
+  <li><b>Clases propias</b> definidas en <code>src/app/globals.css</code> para estilos repetidos y complejos.</li>
+</ul>
+<h3>Variables de color (globals.css)</h3>
+<p>Los colores se definen una vez como variables y se reutilizan en todo el sitio:</p>
+<pre>:root {
+  --bg: 10 10 10;        <span class="c">/* fondo negro */</span>
+  --fg: 245 240 230;     <span class="c">/* texto crema */</span>
+  --accent: 201 168 76;  <span class="c">/* dorado principal */</span>
+}</pre>
+<p>Y clases propias como <code>.btn-primary</code> (botón dorado), <code>.glass</code> (efecto vidrio) o <code>.h2</code> (título con degradado) se usan en muchas pantallas para mantener consistencia.</p>
+</div>
+
+<!-- ===================== 18 ===================== -->
+<div class="section" id="c18">
+<h1>18. Reglas de seguridad de Firestore</h1>
+<p><span class="tag">Archivo</span> <code>firestore.rules</code></p>
+<p>Firestore ejecuta estas reglas en el servidor <b>antes</b> de permitir cualquier lectura o escritura. Ni siquiera modificando el código del navegador se pueden saltar.</p>
+<pre>match /services/{doc} {
+  allow read: if true;                 <span class="c">// cualquiera lee</span>
+  allow write: if request.auth != null; <span class="c">// solo con sesión escribe</span>
+}
+match /records/{doc} {
+  allow read, write: if request.auth != null; <span class="c">// solo admins</span>
+}
+match /reservations/{doc} {
+  allow read, update, delete: if request.auth != null; <span class="c">// admins gestionan</span>
+  allow create: if request.resource.data.status == 'pendiente'; <span class="c">// clienta crea</span>
+}
+match /slots/{doc} {
+  allow read, write: if true; <span class="c">// solo un contador, sin datos personales</span>
+}</pre>
+<p><b>Explicación:</b> <code>request.auth != null</code> significa "hay un usuario con sesión iniciada". La regla de <code>reservations</code> permite a una clienta <b>crear</b> una reserva pendiente, pero solo un admin puede <b>leer o editar</b> (protege los datos personales).</p>
+</div>
+
+<!-- ===================== 19 ===================== -->
+<div class="section" id="c19">
+<h1>19. Ciclo de vida de un dato (flujo técnico)</h1>
+<p>Ejemplo técnico: qué ocurre cuando una clienta reserva una cita.</p>
+<pre>1. La clienta llena el formulario en /reservar (componente React).
+2. Al enviar, el componente llama a createReservation(datos)  [src/lib/booking.ts].
+3. createReservation usa el SDK de Firebase:
+     a. getDoc(slots/fecha_hora)      → lee el contador de cupos
+     b. si count >= CAPACITY          → lanza "FULL" y avisa
+     c. addDoc(reservations, {...})   → crea la reserva "pendiente"
+     d. setDoc(slots/..., count + 1)  → suma un cupo
+4. Firestore aplica las reglas de seguridad y guarda los datos.
+5. El admin abre /admin/reservations:
+     - onAuthStateChanged confirma la sesión
+     - fetchReservationsByDate(hoy) descarga las reservas del día
+     - la pantalla se dibuja con esos datos (useState)
+6. El admin cambia el estado → setReservationStatus(id, "confirmada")
+     → updateDoc actualiza el documento en Firestore.</pre>
+<p>Todo el recorrido respeta las capas: UI → src/lib → Firebase. La UI nunca llama al SDK de Firebase directamente.</p>
+</div>
+
+<!-- ===================== 20 ===================== -->
+<div class="section" id="c20">
+<h1>20. Glosario técnico</h1>
+<table>
+  <tr><th>Término</th><th>Significado</th></tr>
+  <tr><td><b>Framework</b></td><td>Conjunto de herramientas y reglas que dan una estructura lista para construir (ej: Next.js).</td></tr>
+  <tr><td><b>Librería</b></td><td>Código ya hecho que se reutiliza (ej: React, Firebase).</td></tr>
+  <tr><td><b>SDK</b></td><td>"Kit" de funciones que provee un servicio para conectarse a él (ej: el SDK de Firebase).</td></tr>
+  <tr><td><b>Componente</b></td><td>Pieza reutilizable de interfaz en React.</td></tr>
+  <tr><td><b>Hook</b></td><td>Función especial de React (useState, useEffect, useRef).</td></tr>
+  <tr><td><b>Estado (state)</b></td><td>Datos que cambian y redibujan la pantalla.</td></tr>
+  <tr><td><b>Props</b></td><td>Parámetros que recibe un componente.</td></tr>
+  <tr><td><b>async / await</b></td><td>Forma de esperar operaciones que tardan (como pedir datos) sin congelar la página.</td></tr>
+  <tr><td><b>Promesa (Promise)</b></td><td>Un resultado que "llegará después"; se espera con await.</td></tr>
+  <tr><td><b>Query</b></td><td>Consulta a la base de datos con condiciones (ej: solo los activos).</td></tr>
+  <tr><td><b>Documento / Colección</b></td><td>Ficha individual / grupo de fichas en Firestore.</td></tr>
+  <tr><td><b>Variable de entorno</b></td><td>Valor de configuración externo al código (las llaves en .env.local).</td></tr>
+  <tr><td><b>Singleton</b></td><td>Patrón para tener una única instancia de algo (Firebase se inicializa una sola vez).</td></tr>
+  <tr><td><b>Desnormalización</b></td><td>Guardar copias de datos a propósito para conservar el histórico.</td></tr>
+</table>
+</div>
+
+<!-- ===================== 21 ===================== -->
+<div class="section" id="c21">
+<h1>21. Cómo extender el proyecto (agregar un módulo)</h1>
+<p>Gracias a la arquitectura por capas, agregar una función nueva sigue siempre los mismos pasos. Ejemplo: agregar un módulo de "Productos".</p>
+<ol>
+  <li><b>Capa de datos:</b> crear <code>src/lib/products.ts</code> con el tipo <code>Product</code> y funciones <code>fetchProducts</code>, <code>addProduct</code>, etc. (copiando el patrón de <code>services.ts</code>).</li>
+  <li><b>Página:</b> crear <code>src/app/admin/products/page.tsx</code> con la guardia de sesión, el estado y el formulario (copiando el patrón de otro módulo).</li>
+  <li><b>Acceso:</b> agregar una tarjeta en el panel <code>src/app/admin/page.tsx</code> que enlace a la nueva página.</li>
+  <li><b>Seguridad:</b> agregar la regla de la colección <code>products</code> en <code>firestore.rules</code> y publicarla.</li>
+</ol>
+<p>Como cada módulo existente sigue este mismo molde, el proyecto es fácil de crecer y mantener.</p>
+
+<div class="callout" style="margin-top:26px; text-align:center;">
+  <b>Fin de la documentación técnica</b><br>
+  Sistema Web — Gaby Salón y Spa
+</div>
+</div>
+
+</body>
+</html>

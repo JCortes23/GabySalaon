@@ -212,7 +212,7 @@ function ActionBtn({
 }: {
   onClick: () => void;
   tone: "blue" | "green" | "red" | "neutral";
-  icon: React.ComponentType<{ className?: string }>;
+  icon: any;
   label: string;
 }) {
   const styles = {

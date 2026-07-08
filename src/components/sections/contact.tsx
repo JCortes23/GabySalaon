@@ -2,7 +2,8 @@
 
 import { SectionShell } from "@/components/section-shell";
 import { site } from "@/content/site";
-import { Mail, MapPin, Phone, Instagram, Facebook, Clock, Sparkles } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, Facebook, Clock } from "lucide-react";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
 import { motion } from "framer-motion";
 
 export function Contact() {
@@ -79,7 +80,7 @@ export function Contact() {
 
             {/* WhatsApp Button */}
             <a className="btn btn-primary mt-6 w-full" href={wa} target="_blank" rel="noreferrer">
-              <Sparkles className="h-4 w-4" />
+              <WhatsappIcon className="h-4 w-4" />
               Abrir WhatsApp
             </a>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { site } from "@/content/site";
-import { MessageCircle } from "lucide-react";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
 import { motion } from "framer-motion";
 
 export function WhatsAppFloating() {
@@ -37,7 +37,7 @@ export function WhatsAppFloating() {
       />
       
       {/* Icon */}
-      <MessageCircle className="h-6 w-6 relative z-10 group-hover:rotate-12 transition-transform" />
+      <WhatsappIcon className="h-6 w-6 relative z-10 group-hover:rotate-12 transition-transform" />
       
       {/* Text */}
       <span className="relative z-10">WhatsApp</span>

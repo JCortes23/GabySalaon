@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { site } from "@/content/site";
 import { fetchActiveServices, groupByCategory, type Service } from "@/lib/services";
@@ -12,7 +12,8 @@ import {
   createReservation,
   CAPACITY,
 } from "@/lib/booking";
-import { Loader2, ArrowLeft, CalendarCheck, Check, Clock } from "lucide-react";
+import { ServicePicker } from "@/components/service-picker";
+import { Loader2, ArrowLeft, CalendarCheck, Check, Clock, Home } from "lucide-react";
 
 export default function ReservarPage() {
   const today = todayStr();
@@ -63,8 +64,8 @@ export default function ReservarPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  const serviceGroups = useMemo(() => groupByCategory(services), [services]);
-  const slots = useMemo(() => slotsForDate(date), [date]);
+  const serviceGroups = groupByCategory(services);
+  const slots = slotsForDate(date);
   const closed = isClosed(date);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -150,30 +151,28 @@ export default function ReservarPage() {
               Tu reserva quedó como <b>pendiente</b>. El salón la confirmará. Si necesitás cambiarla,
               escribinos por WhatsApp.
             </p>
-            <button onClick={resetForNew} className="btn btn-secondary mt-6">
-              Hacer otra reserva
-            </button>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <button onClick={resetForNew} className="btn btn-secondary">
+                Hacer otra reserva
+              </button>
+              <Link href="/" className="btn btn-primary">
+                <Home className="h-4 w-4" />
+                Volver al inicio
+              </Link>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="glass-premium rounded-[2rem] p-6 md:p-8">
             {/* Servicio */}
             <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-stone-400">Servicio</label>
-            <select
-              value={serviceId}
-              onChange={(e) => setServiceId(e.target.value)}
-              className="mb-5 w-full rounded-2xl border border-yellow-800/40 bg-black/60 px-4 py-3 text-sm text-stone-100 outline-none focus:border-yellow-500 [color-scheme:dark]"
-            >
-              <option value="">— Elegí un servicio —</option>
-              {serviceGroups.map((g) => (
-                <optgroup key={g.category} label={g.category}>
-                  {g.items.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}{s.price > 0 ? ` — ₡${s.price.toLocaleString("es-CR")}` : ""}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
+            <div className="mb-5">
+              <ServicePicker
+                groups={serviceGroups}
+                value={serviceId}
+                onChange={setServiceId}
+                placeholder="— Elegí un servicio —"
+              />
+            </div>
 
             {/* Fecha */}
             <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-stone-400">Fecha</label>

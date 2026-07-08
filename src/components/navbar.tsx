@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { site } from "@/content/site";
 import { cn } from "@/components/utils";
-import { Instagram, Facebook, Menu, X, Sparkles, Lock, CalendarCheck } from "lucide-react";
+import { Instagram, Facebook, Menu, X, Lock, CalendarCheck } from "lucide-react";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
 import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
@@ -68,12 +69,6 @@ export function Navbar() {
               />
             </div>
           </div>
-          <div className="leading-tight">
-            <div className="text-sm font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              {site.name}
-            </div>
-            <div className="text-xs text-stone-400">{site.tagline.split('.')[0]}</div>
-          </div>
         </a>
 
         {/* Desktop Navigation */}
@@ -99,7 +94,7 @@ export function Navbar() {
             className="btn btn-primary text-xs"
             aria-label="Contactar por WhatsApp"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <WhatsappIcon className="h-3.5 w-3.5" />
             WhatsApp
           </a>
           <div className="flex items-center gap-2">
@@ -191,7 +186,7 @@ export function Navbar() {
                   className="btn btn-primary w-full"
                   onClick={() => setOpen(false)}
                 >
-                  <Sparkles className="h-4 w-4" />
+                  <WhatsappIcon className="h-4 w-4" />
                   WhatsApp
                 </motion.a>
                 <div className="flex items-center gap-3 pt-2 border-t border-yellow-900/30 mt-2">

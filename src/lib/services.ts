@@ -43,21 +43,29 @@ export async function fetchActiveServices(): Promise<Service[]> {
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as ServiceInput) }));
 }
 
+// Agrupa los servicios por categoría (forma simple, con arreglos).
 export function groupByCategory(services: Service[]): ServiceGroup[] {
-  const map = new Map<string, Service[]>();
+  const grupos: ServiceGroup[] = [];
+
   for (const s of services) {
-    if (!map.has(s.category)) map.set(s.category, []);
-    map.get(s.category)!.push(s);
+    // buscar si la categoría ya existe en la lista
+    let grupo = grupos.find((g) => g.category === s.category);
+    if (!grupo) {
+      grupo = { category: s.category, items: [] };
+      grupos.push(grupo);
+    }
+    grupo.items.push(s);
   }
-  for (const arr of map.values()) {
-    arr.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name));
+
+  // ordenar los servicios dentro de cada categoría por su número de orden
+  for (const g of grupos) {
+    g.items.sort((a, b) => (a.order || 0) - (b.order || 0));
   }
-  const rank = (c: string) => {
-    const i = CATEGORY_ORDER.indexOf(c);
-    return i === -1 ? 999 : i;
-  };
-  const cats = Array.from(map.keys()).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
-  return cats.map((category) => ({ category, items: map.get(category)! }));
+
+  // ordenar las categorías (Cabello, Uñas, Spa & Estética)
+  grupos.sort((a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category));
+
+  return grupos;
 }
 
 export async function addService(data: ServiceInput) {

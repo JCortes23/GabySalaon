@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SectionShell } from "@/components/section-shell";
 import { site } from "@/content/site";
 import { Check, Scissors, Sparkles, Heart } from "lucide-react";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
 import { motion } from "framer-motion";
 import { fetchActiveServices, groupByCategory, type ServiceGroup } from "@/lib/services";
 
@@ -162,7 +163,7 @@ export function Services() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Sparkles className="h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
+                  <WhatsappIcon className="h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
                   Consultar por WhatsApp
                 </a>
               </div>

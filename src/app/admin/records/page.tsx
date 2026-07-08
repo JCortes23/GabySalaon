@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -12,6 +12,7 @@ import {
   todayStr,
   type ServiceRecord,
 } from "@/lib/records";
+import { ServicePicker } from "@/components/service-picker";
 import {
   Loader2,
   Plus,
@@ -79,13 +80,16 @@ export default function AdminRecordsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checking, date]);
 
-  const serviceGroups = useMemo(() => groupByCategory(services), [services]);
+  const serviceGroups = groupByCategory(services);
 
-  const dayTotals = useMemo(() => {
-    const count = records.reduce((sum, r) => sum + (r.quantity || 0), 0);
-    const revenue = records.reduce((sum, r) => sum + (r.price || 0) * (r.quantity || 0), 0);
-    return { count, revenue };
-  }, [records]);
+  // Sumar la cantidad y el total del día (forma simple, con un bucle).
+  let cantidadDia = 0;
+  let totalDia = 0;
+  for (const r of records) {
+    cantidadDia += r.quantity;
+    totalDia += r.price * r.quantity;
+  }
+  const dayTotals = { count: cantidadDia, revenue: totalDia };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -202,23 +206,12 @@ export default function AdminRecordsPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-stone-400">
                 Servicio
               </label>
-              <select
+              <ServicePicker
+                groups={serviceGroups}
                 value={serviceId}
-                onChange={(e) => setServiceId(e.target.value)}
-                className="w-full rounded-2xl border border-yellow-800/40 bg-black/60 px-4 py-3 text-sm text-stone-100 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-600/30 [color-scheme:dark]"
-              >
-                <option value="">— Seleccioná un servicio —</option>
-                {serviceGroups.map((g) => (
-                  <optgroup key={g.category} label={g.category}>
-                    {g.items.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name}
-                        {s.price > 0 ? ` — ₡${s.price.toLocaleString("es-CR")}` : ""}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
+                onChange={setServiceId}
+                placeholder="— Seleccioná un servicio —"
+              />
               {services.length === 0 && (
                 <p className="mt-2 text-xs text-stone-500">
                   No hay servicios activos. Cargalos primero en el módulo de Servicios.

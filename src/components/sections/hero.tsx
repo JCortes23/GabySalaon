@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { site } from "@/content/site";
 import { Sparkles, Star, Heart } from "lucide-react";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
 
 export function Hero() {
   const digits = site.socials.whatsapp.replace(/\D/g, "");
@@ -78,7 +79,7 @@ export function Hero() {
               className="mt-8 flex flex-col gap-4 sm:flex-row"
             >
               <a className="btn btn-primary" href={wa} target="_blank" rel="noreferrer">
-                <Sparkles className="w-4 h-4" />
+                <WhatsappIcon className="w-4 h-4" />
                 Reservar por WhatsApp
               </a>
               <a className="btn btn-secondary" href="#servicios">

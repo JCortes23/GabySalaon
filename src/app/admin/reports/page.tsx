@@ -1,20 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { fetchRecordsBetween, todayStr, type ServiceRecord } from "@/lib/records";
-import {
-  Loader2,
-  ArrowLeft,
-  BarChart3,
-  Coins,
-  ClipboardCheck,
-  Receipt,
-  CalendarDays,
-  Download,
-} from "lucide-react";
+import { Loader2, ArrowLeft, BarChart3, Coins, ClipboardCheck } from "lucide-react";
 
 // ---- Helpers de fecha (YYYY-MM-DD, hora local) ----
 function fmt(d: Date): string {
@@ -98,76 +89,29 @@ export default function AdminReportsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checking, from, to]);
 
-  // ---- Cálculos ----
-  const stats = useMemo(() => {
-    const totalRevenue = records.reduce((s, r) => s + r.price * r.quantity, 0);
-    const totalCount = records.reduce((s, r) => s + r.quantity, 0);
-    const days = new Set(records.map((r) => r.date));
-    const avgTicket = totalCount > 0 ? totalRevenue / totalCount : 0;
+  // ---- Cálculos (forma simple, con bucles) ----
+  // Sumar los ingresos totales y la cantidad de servicios.
+  let totalRevenue = 0;
+  let totalCount = 0;
+  for (const r of records) {
+    totalRevenue += r.price * r.quantity;
+    totalCount += r.quantity;
+  }
 
-    const catMap = new Map<string, { count: number; revenue: number }>();
-    const svcMap = new Map<string, { name: string; category: string; count: number; revenue: number }>();
-    const dayMap = new Map<string, number>();
-
-    for (const r of records) {
-      const rev = r.price * r.quantity;
-
-      const c = catMap.get(r.category) ?? { count: 0, revenue: 0 };
-      c.count += r.quantity;
-      c.revenue += rev;
-      catMap.set(r.category, c);
-
-      const key = `${r.category}||${r.serviceName}`;
-      const sv = svcMap.get(key) ?? { name: r.serviceName, category: r.category, count: 0, revenue: 0 };
-      sv.count += r.quantity;
-      sv.revenue += rev;
-      svcMap.set(key, sv);
-
-      dayMap.set(r.date, (dayMap.get(r.date) ?? 0) + rev);
+  // Agrupar los ingresos por categoría.
+  const byCategory: { category: string; count: number; revenue: number }[] = [];
+  for (const r of records) {
+    let cat = byCategory.find((c) => c.category === r.category);
+    if (!cat) {
+      cat = { category: r.category, count: 0, revenue: 0 };
+      byCategory.push(cat);
     }
+    cat.count += r.quantity;
+    cat.revenue += r.price * r.quantity;
+  }
+  byCategory.sort((a, b) => b.revenue - a.revenue);
 
-    const byCategory = Array.from(catMap.entries())
-      .map(([category, v]) => ({ category, ...v }))
-      .sort((a, b) => b.revenue - a.revenue);
-
-    const byService = Array.from(svcMap.values()).sort((a, b) => b.revenue - a.revenue);
-
-    const byDay = Array.from(dayMap.entries())
-      .map(([date, revenue]) => ({ date, revenue }))
-      .sort((a, b) => a.date.localeCompare(b.date));
-
-    return { totalRevenue, totalCount, activeDays: days.size, avgTicket, byCategory, byService, byDay };
-  }, [records]);
-
-  const maxDayRevenue = useMemo(
-    () => stats.byDay.reduce((m, d) => Math.max(m, d.revenue), 0),
-    [stats.byDay],
-  );
-
-  const exportCSV = () => {
-    const headers = ["Fecha", "Categoria", "Servicio", "Cantidad", "PrecioUnitario", "Total", "Nota"];
-    const rows = [...records]
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .map((r) => [
-        r.date,
-        r.category,
-        r.serviceName,
-        String(r.quantity),
-        String(r.price),
-        String(r.price * r.quantity),
-        (r.note ?? "").replace(/"/g, '""'),
-      ]);
-    const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${cell}"`).join(","))
-      .join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `reporte_${from}_a_${to}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const stats = { totalRevenue, totalCount, byCategory };
 
   if (checking) {
     return (
@@ -203,18 +147,9 @@ export default function AdminReportsPage() {
       </header>
 
       <div className="mx-auto max-w-5xl px-5 py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold gradient-wave">Reportes</h1>
-            <p className="mt-2 text-sm text-stone-400">Resumen de los servicios realizados.</p>
-          </div>
-          <button
-            onClick={exportCSV}
-            disabled={records.length === 0}
-            className="inline-flex items-center gap-2 rounded-2xl border border-yellow-800/40 bg-black/60 px-4 py-2.5 text-sm font-semibold text-yellow-400 transition-colors hover:border-yellow-500 hover:bg-yellow-900/20 disabled:opacity-40"
-          >
-            <Download className="h-4 w-4" /> Exportar CSV
-          </button>
+        <div>
+          <h1 className="text-2xl font-bold gradient-wave">Reportes</h1>
+          <p className="mt-2 text-sm text-stone-400">Resumen de los servicios realizados.</p>
         </div>
 
         {/* Selector de rango */}
@@ -280,34 +215,10 @@ export default function AdminReportsPage() {
         ) : (
           <>
             {/* KPIs */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <KPI icon={Coins} label="Ingresos totales" value={colones(stats.totalRevenue)} />
               <KPI icon={ClipboardCheck} label="Servicios realizados" value={String(stats.totalCount)} />
-              <KPI icon={Receipt} label="Ticket promedio" value={colones(stats.avgTicket)} />
-              <KPI icon={CalendarDays} label="Días con actividad" value={String(stats.activeDays)} />
             </div>
-
-            {/* Ingresos por día */}
-            <Card title="Ingresos por día">
-              <div className="flex items-end gap-2 overflow-x-auto pb-2" style={{ minHeight: 160 }}>
-                {stats.byDay.map((d) => {
-                  const h = maxDayRevenue > 0 ? Math.round((d.revenue / maxDayRevenue) * 120) : 0;
-                  return (
-                    <div key={d.date} className="flex shrink-0 flex-col items-center gap-2" style={{ width: 44 }}>
-                      <div className="text-[10px] font-semibold text-stone-400">
-                        {Math.round(d.revenue / 1000)}k
-                      </div>
-                      <div
-                        className="w-6 rounded-t-md bg-gradient-to-t from-yellow-700 to-yellow-400"
-                        style={{ height: Math.max(h, 4) }}
-                        title={`${d.date}: ${colones(d.revenue)}`}
-                      />
-                      <div className="text-[10px] text-stone-600">{d.date.slice(5)}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Card>
 
             {/* Ingresos por categoría */}
             <Card title="Ingresos por categoría">
@@ -334,31 +245,6 @@ export default function AdminReportsPage() {
               </div>
             </Card>
 
-            {/* Ranking de servicios */}
-            <Card title="Servicios más realizados">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-yellow-900/30 text-xs uppercase tracking-wide text-stone-500">
-                      <th className="py-2 pr-3">Servicio</th>
-                      <th className="py-2 pr-3">Categoría</th>
-                      <th className="py-2 pr-3 text-right">Cantidad</th>
-                      <th className="py-2 text-right">Ingresos</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stats.byService.map((s) => (
-                      <tr key={`${s.category}-${s.name}`} className="border-b border-white/5">
-                        <td className="py-2.5 pr-3 font-semibold text-stone-200">{s.name}</td>
-                        <td className="py-2.5 pr-3 text-stone-500">{s.category}</td>
-                        <td className="py-2.5 pr-3 text-right text-stone-300">{s.count}</td>
-                        <td className="py-2.5 text-right font-semibold text-yellow-400">{colones(s.revenue)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Card>
           </>
         )}
       </div>
@@ -366,15 +252,7 @@ export default function AdminReportsPage() {
   );
 }
 
-function KPI({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-}) {
+function KPI({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
   return (
     <div className="rounded-[2rem] border border-yellow-800/30 bg-black/50 p-6">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-stone-500">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -72,13 +72,15 @@ export default function AdminServicesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checking]);
 
-  const activeServices = useMemo(() => services.filter((s) => s.active !== false), [services]);
-  const archivedServices = useMemo(() => services.filter((s) => s.active === false), [services]);
-  const groups = useMemo(() => groupByCategory(activeServices), [activeServices]);
-  const knownCategories = useMemo(() => {
-    const set = new Set<string>([...CATEGORY_ORDER, ...services.map((s) => s.category)]);
-    return Array.from(set);
-  }, [services]);
+  const activeServices = services.filter((s) => s.active !== false);
+  const archivedServices = services.filter((s) => s.active === false);
+  const groups = groupByCategory(activeServices);
+
+  // Lista de categorías para las sugerencias del formulario.
+  const knownCategories: string[] = [...CATEGORY_ORDER];
+  for (const s of services) {
+    if (!knownCategories.includes(s.category)) knownCategories.push(s.category);
+  }
 
   const resetForm = () => {
     setForm(EMPTY);

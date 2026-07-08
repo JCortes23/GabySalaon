@@ -13,7 +13,7 @@ export function WhatsAppFloating() {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full px-5 py-4 text-sm font-bold text-white shadow-2xl hover:shadow-stone-9000/50 transition-all duration-300 group"
+      className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full px-5 py-4 text-sm font-bold text-white shadow-2xl hover:shadow-black/50 transition-all duration-300 group"
       style={{
         background: 'linear-gradient(135deg, rgb(201, 168, 76), rgb(220, 188, 96), rgb(160, 128, 40))'
       }}

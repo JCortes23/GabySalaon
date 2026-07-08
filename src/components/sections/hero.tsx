@@ -128,7 +128,7 @@ export function Hero() {
             
             {/* Main image container */}
             <div className="relative overflow-hidden rounded-[2.5rem] border-2 border-white/60 bg-black/90 shadow-2xl shimmer">
-              <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/30/40 via-transparent to-amber-100/40" />
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/40 via-transparent to-amber-100/40" />
               <Image
                 src="/images/hero.png"
                 alt="Salón de belleza"

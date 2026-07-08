@@ -49,7 +49,7 @@ export function Testimonials() {
     <SectionShell
       eyebrow="Testimonios"
       title="Lo que dicen nuestras clientas"
-      description="Lo que opinan nuestras clientas"
+      description="Reseñas reales de quienes ya confían en nosotras."
       className="section-alt"
     >
       <div className="relative max-w-4xl mx-auto">
@@ -78,7 +78,7 @@ export function Testimonials() {
                         background: 'linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.1))'
                       }}
                     >
-                      <Quote className="h-7 w-7 text-stone-9000" fill="currentColor" />
+                      <Quote className="h-7 w-7 text-yellow-400" fill="currentColor" />
                     </div>
                     
                     {/* 5 star rating */}
@@ -148,7 +148,7 @@ export function Testimonials() {
                 }}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
                   idx === currentIndex 
-                    ? 'w-8 bg-gradient-to-r from-stone-9000 to-yellow-400' 
+                    ? 'w-8 bg-gradient-to-r from-yellow-600 to-yellow-400'
                     : 'w-2.5 bg-yellow-800/40 hover:bg-yellow-600'
                 }`}
                 aria-label={`Ir a testimonio ${idx + 1}`}

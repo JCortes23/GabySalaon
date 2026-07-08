@@ -6,12 +6,12 @@ export function Footer() {
   return (
     <footer className="border-t-2 border-yellow-900/30 relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(255, 251, 254, 1) 0%, rgba(255, 247, 252, 1) 100%)'
+        background: 'linear-gradient(135deg, rgba(16, 16, 10, 1) 0%, rgba(10, 10, 8, 1) 100%)'
       }}
     >
       {/* Decorative gradient blobs */}
-      <div className="absolute top-0 left-[10%] w-32 h-32 bg-gradient-to-br from-yellow-800/40/30 to-amber-200/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-[15%] w-40 h-40 bg-gradient-to-br from-yellow-200/25 to-yellow-800/40/25 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-[10%] w-32 h-32 bg-gradient-to-br from-yellow-800/30 to-amber-200/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-[15%] w-40 h-40 bg-gradient-to-br from-yellow-200/20 to-yellow-800/25 rounded-full blur-3xl" />
       
       <div className="mx-auto max-w-6xl px-5 py-12 relative z-10">
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">

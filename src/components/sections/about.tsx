@@ -10,19 +10,16 @@ const perks = [
     icon: Sparkles,
     title: "Resultados que enamoran",
     desc: "Detalles finos, acabados limpios y estilo actual.",
-    gradient: "from-yellow-500 to-yellow-500"
   },
   {
     icon: ShieldCheck,
     title: "Cuidado e higiene",
     desc: "Herramientas desinfectadas y protocolos consistentes.",
-    gradient: "from-yellow-400 to-stone-9000"
   },
   {
     icon: HeartHandshake,
     title: "Trato cercano",
     desc: "Te escuchamos y te recomendamos lo mejor para vos.",
-    gradient: "from-yellow-500 to-yellow-400"
   },
 ];
 

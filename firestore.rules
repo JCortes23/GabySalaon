@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Servicios: el sitio público puede LEER; solo administradores
+    // autenticados pueden crear / editar / archivar.
+    match /services/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Registros diarios: datos internos. Solo administradores autenticados
+    // pueden leer y escribir (no se exponen al sitio público).
+    match /records/{doc} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Reservas: las clientas (invitadas) pueden CREAR una reserva pendiente,
+    // pero NO leer ni editar (privacidad). Los administradores gestionan todo.
+    match /reservations/{doc} {
+      allow read, update, delete: if request.auth != null;
+      allow create: if request.resource.data.status == 'pendiente';
+    }
+
+    // Contadores de cupo por hora. Solo guardan un número (sin datos personales),
+    // por eso cualquiera puede leerlos y actualizarlos al reservar.
+    match /slots/{doc} {
+      allow read, write: if true;
+    }
+
+    // Todo lo demás queda bloqueado por defecto.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,19 +1,51 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SectionShell } from "@/components/section-shell";
 import { site } from "@/content/site";
 import { Check, Scissors, Sparkles, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { fetchActiveServices, groupByCategory, type ServiceGroup } from "@/lib/services";
 
 const categoryIcons = {
   "Cabello": Scissors,
   "Uñas": Sparkles,
-  "Depilación": Heart,
+  "Spa & Estética": Heart,
 };
+
+// Respaldo: usa los servicios de site.ts si Firestore aún no tiene datos.
+const fallbackGroups: ServiceGroup[] = site.services.map((cat) => ({
+  category: cat.category,
+  items: cat.items.map((it, i) => ({
+    id: `${cat.category}-${i}`,
+    category: cat.category,
+    name: it.name,
+    desc: it.desc,
+    price: (it as { price?: number }).price ?? 0,
+    order: i,
+  })),
+}));
 
 export function Services() {
   const digits = site.socials.whatsapp.replace(/\D/g, "");
   const wa = `https://wa.me/${digits}`;
+
+  const [groups, setGroups] = useState<ServiceGroup[]>(fallbackGroups);
+
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      try {
+        const list = await fetchActiveServices();
+        if (!cancel && list.length > 0) setGroups(groupByCategory(list));
+      } catch {
+        // Si Firestore falla o no está configurado, se mantiene el respaldo.
+      }
+    })();
+    return () => {
+      cancel = true;
+    };
+  }, []);
 
   return (
     <SectionShell
@@ -24,10 +56,10 @@ export function Services() {
       className="section-alt"
     >
       <div className="grid gap-6 md:grid-cols-3">
-        {site.services.map((cat, idx) => {
+        {groups.map((cat, idx) => {
           const IconComponent = categoryIcons[cat.category as keyof typeof categoryIcons];
           return (
-            <motion.div 
+            <motion.div
               key={cat.category}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -35,13 +67,13 @@ export function Services() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative card-animated-border"
             >
-              
+
               <div className="relative rounded-[2rem] border-2 border-white/60 bg-black/90 p-7 shadow-xl hover:shadow-2xl transition-all duration-300 h-full flex flex-col z-10">
                 {/* Category header with icon */}
                 <div className="mb-6 flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl"
                     style={{
-                      background: idx === 0 
+                      background: idx === 0
                         ? 'linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.1))'
                         : idx === 1
                         ? 'linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(160, 128, 40, 0.1))'
@@ -51,7 +83,7 @@ export function Services() {
                     {IconComponent && (
                       <IconComponent className="h-6 w-6"
                         style={{
-                          color: idx === 0 
+                          color: idx === 0
                             ? 'rgb(201, 168, 76)'
                             : idx === 1
                             ? 'rgb(220, 188, 96)'
@@ -62,7 +94,7 @@ export function Services() {
                   </div>
                   <h3 className="text-2xl font-bold font-[var(--font-playfair)]"
                     style={{
-                      background: idx === 0 
+                      background: idx === 0
                         ? 'linear-gradient(135deg, rgb(201, 168, 76), rgb(220, 188, 96))'
                         : idx === 1
                         ? 'linear-gradient(135deg, rgb(220, 188, 96), rgb(160, 128, 40))'
@@ -79,8 +111,8 @@ export function Services() {
                 {/* Service items */}
                 <div className="space-y-4 flex-1">
                   {cat.items.map((it, itemIdx) => (
-                    <motion.div 
-                      key={it.name}
+                    <motion.div
+                      key={it.id}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
@@ -95,7 +127,7 @@ export function Services() {
                       <div className="flex items-start gap-3">
                         <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl"
                           style={{
-                            background: idx === 0 
+                            background: idx === 0
                               ? 'linear-gradient(135deg, rgb(201, 168, 76), rgb(220, 188, 96))'
                               : idx === 1
                               ? 'linear-gradient(135deg, rgb(220, 188, 96), rgb(160, 128, 40))'
@@ -105,7 +137,17 @@ export function Services() {
                           <Check className="h-4 w-4 text-white" strokeWidth={3} />
                         </span>
                         <div className="flex-1">
-                          <div className="text-sm font-bold text-stone-200">{it.name}</div>
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="text-sm font-bold text-stone-200">{it.name}</div>
+                            {it.price > 0 && (
+                              <div className="shrink-0 text-right leading-none">
+                                <div className="text-[10px] uppercase tracking-wide text-stone-500">Desde</div>
+                                <div className="text-sm font-bold text-yellow-400">
+                                  ₡{it.price.toLocaleString("es-CR")}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           <div className="mt-1 text-xs text-stone-400 leading-relaxed">{it.desc}</div>
                         </div>
                       </div>
@@ -114,10 +156,10 @@ export function Services() {
                 </div>
 
                 {/* CTA Button */}
-                <a 
-                  className="btn btn-primary mt-6 w-full group/btn" 
-                  href={wa} 
-                  target="_blank" 
+                <a
+                  className="btn btn-primary mt-6 w-full group/btn"
+                  href={wa}
+                  target="_blank"
                   rel="noreferrer"
                 >
                   <Sparkles className="h-4 w-4 group-hover/btn:rotate-12 transition-transform" />

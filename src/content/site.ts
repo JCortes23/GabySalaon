@@ -25,6 +25,23 @@ export const site = {
     mapsEmbedUrl:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6691.536856207775!2d-84.21201302313156!3d10.018858090087546!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0fa2a56c2e2b7%3A0xfe00dcd8327ee770!2sGaby%20Sal%C3%B3n%20y%20Spa!5e1!3m2!1ses-419!2scr!4v1774046279919!5m2!1ses-419!2scrr",
   },
+  // Configuración de reservas online.
+  // slotMinutes: duración de cada franja. capacityPerSlot: cuántas clientas se
+  // pueden atender a la vez (estaciones/personal). hours: horario por día de
+  // semana (0=domingo … 6=sábado); null = cerrado.
+  booking: {
+    slotMinutes: 60,
+    capacityPerSlot: 2,
+    hours: {
+      0: null,
+      1: { open: "08:00", close: "18:00" },
+      2: { open: "08:00", close: "18:00" },
+      3: { open: "08:00", close: "18:00" },
+      4: { open: "08:00", close: "18:00" },
+      5: { open: "08:00", close: "18:00" },
+      6: { open: "08:00", close: "16:00" },
+    } as Record<number, { open: string; close: string } | null>,
+  },
   highlights: [
     { title: "+17 años de experiencia", desc: "Profesionales con trayectoria y pasión por la belleza." },
     { title: "Atención personalizada", desc: "Cada clienta recibe asesoría adaptada a su estilo." },
@@ -34,26 +51,26 @@ export const site = {
     {
       category: "Cabello",
       items: [
-        { name: "Corte & Peinado", desc: "Estilos modernos y clásicos con asesoría personalizada." },
-        { name: "Color & Mechas", desc: "Tonos naturales, fantasía, balayage y correcciones de color." },
-        { name: "Tratamientos", desc: "Hidratación profunda, keratina, reparación y brillo." },
-        { name: "Alisado & Permanente", desc: "Resultados duraderos con técnica profesional." },
+        { name: "Corte & Peinado", desc: "Estilos modernos y clásicos con asesoría personalizada.", price: 8000 },
+        { name: "Color & Mechas", desc: "Tonos naturales, fantasía, balayage y correcciones de color.", price: 25000 },
+        { name: "Tratamientos", desc: "Hidratación profunda, keratina, reparación y brillo.", price: 20000 },
+        { name: "Alisado & Permanente", desc: "Resultados duraderos con técnica profesional.", price: 30000 },
       ],
     },
     {
       category: "Uñas",
       items: [
-        { name: "Manicure", desc: "Limpieza, forma, esmaltado y diseños creativos." },
-        { name: "Pedicure", desc: "Cuidado completo de pies con masaje relajante." },
-        { name: "Uñas Acrílicas / Gel", desc: "Extensiones de larga duración con acabado premium." },
+        { name: "Manicure", desc: "Limpieza, forma, esmaltado y diseños creativos.", price: 6000 },
+        { name: "Pedicure", desc: "Cuidado completo de pies con masaje relajante.", price: 8000 },
+        { name: "Uñas Acrílicas / Gel", desc: "Extensiones de larga duración con acabado premium.", price: 12000 },
       ],
     },
     {
       category: "Spa & Estética",
       items: [
-        { name: "Depilación", desc: "Facial y corporal con técnica precisa y suave." },
-        { name: "Maquillaje", desc: "Para ocasiones especiales, eventos y uso diario." },
-        { name: "Tratamientos Faciales", desc: "Limpieza, hidratación y luminosidad para tu piel." },
+        { name: "Depilación", desc: "Facial y corporal con técnica precisa y suave.", price: 5000 },
+        { name: "Maquillaje", desc: "Para ocasiones especiales, eventos y uso diario.", price: 15000 },
+        { name: "Tratamientos Faciales", desc: "Limpieza, hidratación y luminosidad para tu piel.", price: 18000 },
       ],
     },
   ],

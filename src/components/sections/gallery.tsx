@@ -61,7 +61,7 @@ export function Gallery() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Zoom icon */}
-            <div className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/90/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
+            <div className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
               <ZoomIn className="h-5 w-5 text-yellow-400" />
             </div>
                         
@@ -90,7 +90,7 @@ export function Gallery() {
             >
               {/* Close button */}
               <button
-                className="absolute right-5 top-5 z-10 rounded-2xl border-2 border-white/60 bg-black/90/95 backdrop-blur-sm p-3 hover:scale-110 transition-all duration-300 group/close"
+                className="absolute right-5 top-5 z-10 rounded-2xl border-2 border-white/60 bg-black/95 backdrop-blur-sm p-3 hover:scale-110 transition-all duration-300 group/close"
                 onClick={() => setActive(null)}
                 aria-label="Cerrar"
                 style={{
@@ -102,7 +102,7 @@ export function Gallery() {
               
               {/* Image container */}
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/30/20 via-transparent to-amber-100/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-transparent to-amber-100/20" />
                 <Image
                   src={current.src}
                   alt={current.alt}
